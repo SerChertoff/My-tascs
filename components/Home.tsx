@@ -3,9 +3,22 @@
 import { useEffect, useState } from 'react'
 import { useBasePath } from '../lib/useBasePath'
 import { getCurrentUser, logout } from '../lib/auth'
+import {
+  Task,
+  getTodayTasks,
+  getTasks,
+  toggleTaskStatus,
+  deleteTask,
+  getTaskStats,
+  getPriorityColors,
+  formatTime,
+} from '../lib/tasks'
 
 export default function Home() {
   const [user, setUser] = useState<{ email: string; name?: string } | null>(null)
+  const [tasks, setTasks] = useState<Task[]>([])
+  const [stats, setStats] = useState(getTaskStats())
+  const [pendingTasksCount, setPendingTasksCount] = useState(0)
   const basePath = useBasePath()
 
   useEffect(() => {
@@ -14,20 +27,53 @@ export default function Home() {
       window.location.href = `${basePath}/login`
     } else {
       setUser(currentUser)
+      loadTasks()
     }
   }, [basePath])
 
-  const handleLogout = () => {
-    logout()
-    window.location.href = `${basePath}/`
+  const loadTasks = () => {
+    const todayTasks = getTodayTasks()
+    // Сортируем: сначала незавершенные, потом завершенные, затем по времени
+    const sorted = todayTasks.sort((a, b) => {
+      if (a.status !== b.status) {
+        return a.status === 'pending' ? -1 : 1
+      }
+      return a.time.localeCompare(b.time)
+    })
+    setTasks(sorted)
+    setStats(getTaskStats())
+    
+    // Подсчитываем предстоящие незавершенные задачи
+    const allTasks = getTasks()
+    const now = new Date()
+    const today = now.toISOString().split('T')[0]
+    const pendingUpcoming = allTasks.filter(task => {
+      if (task.status !== 'pending') return false
+      const taskDate = new Date(task.date)
+      const todayDate = new Date(today)
+      return taskDate >= todayDate
+    })
+    setPendingTasksCount(pendingUpcoming.length)
+  }
+
+  const handleToggleTask = (id: string) => {
+    toggleTaskStatus(id)
+    loadTasks()
+  }
+
+  const handleDeleteTask = (id: string) => {
+    if (confirm('Вы уверены, что хотите удалить эту задачу?')) {
+      deleteTask(id)
+      loadTasks()
+    }
   }
 
   if (!user) {
-    return null // Показываем ничего, пока проверяем авторизацию
+    return null
   }
 
   return (
-    <div className="relative min-h-screen w-full bg-white pb-20">
+    <div className="relative min-h-screen w-full bg-white pb-24">
       {/* Header */}
       <div className="flex items-center justify-between px-6 pt-7 pb-4">
         <div className="flex items-center gap-4">
@@ -46,7 +92,10 @@ export default function Home() {
           </div>
         </div>
         <div className="flex items-center gap-4">
-          <div className="relative">
+          <a
+            href={`${basePath}/notifications`}
+            className="relative cursor-pointer hover:opacity-70 transition-opacity"
+          >
             <svg
               className="w-6 h-6 text-[#24252C]"
               viewBox="0 0 24 24"
@@ -67,8 +116,14 @@ export default function Home() {
                 strokeLinejoin="round"
               />
             </svg>
-            <div className="absolute top-0 right-0 w-2 h-2 bg-[#5F33E1] rounded-full" />
-          </div>
+            {pendingTasksCount > 0 && (
+              <div className="absolute -top-1 -right-1 w-5 h-5 bg-[#5F33E1] rounded-full flex items-center justify-center">
+                <span className="text-[10px] text-white font-semibold">
+                  {pendingTasksCount > 9 ? '9+' : pendingTasksCount}
+                </span>
+              </div>
+            )}
+          </a>
           <button onClick={handleLogout}>
             <svg
               className="w-6 h-6 text-[#24252C]"
@@ -88,7 +143,9 @@ export default function Home() {
         <div className="flex items-center gap-2 mb-4">
           <h2 className="text-lg font-semibold text-[#24252C]">Today&apos;s Tasks</h2>
           <div className="w-4 h-4 bg-[#EEE9FF] rounded-full flex items-center justify-center">
-            <span className="text-[11px] text-[#5F33E1]">4</span>
+            <span className="text-[11px] text-[#5F33E1] font-semibold">
+              {tasks.filter(t => t.status === 'pending').length}
+            </span>
           </div>
         </div>
 
@@ -96,19 +153,19 @@ export default function Home() {
         <div className="grid grid-cols-2 gap-4 mb-6">
           <div className="bg-white rounded-[15px] p-4 shadow-[0px_4px_32px_rgba(0,0,0,0.04)]">
             <p className="text-sm text-[#24252C] mb-2">Total</p>
-            <p className="text-[64px] font-semibold text-[#24252C] leading-none">29</p>
+            <p className="text-[64px] font-semibold text-[#24252C] leading-none">{stats.total}</p>
           </div>
           <div className="bg-[#5F33E1] rounded-[15px] p-4 shadow-[0px_4px_32px_rgba(0,0,0,0.04)]">
             <p className="text-sm text-white mb-2">Completed tasks</p>
-            <p className="text-[64px] font-semibold text-white leading-none">4</p>
+            <p className="text-[64px] font-semibold text-white leading-none">{stats.completed}</p>
           </div>
           <div className="bg-[#5F33E1] rounded-[15px] p-4 shadow-[0px_4px_32px_rgba(0,0,0,0.04)]">
             <p className="text-sm text-white mb-2">Today tasks</p>
-            <p className="text-[64px] font-semibold text-white leading-none">6</p>
+            <p className="text-[64px] font-semibold text-white leading-none">{stats.today}</p>
           </div>
           <div className="bg-white rounded-[15px] p-4 shadow-[0px_4px_32px_rgba(0,0,0,0.04)]">
             <p className="text-sm text-[#24252C] mb-2">Week tasks</p>
-            <p className="text-[64px] font-semibold text-[#24252C] leading-none">15</p>
+            <p className="text-[64px] font-semibold text-[#24252C] leading-none">{stats.week}</p>
           </div>
         </div>
 
@@ -117,43 +174,36 @@ export default function Home() {
 
         {/* Task Cards */}
         <div className="space-y-4 mb-6">
-          <TaskCard
-            title="Market Research"
-            time="10:00 AM"
-            priority="Medium"
-            priorityColor="bg-[#EDE8FF]"
-            priorityTextColor="text-[#5F33E1]"
-          />
-          <TaskCard
-            title="Competitive Analysis"
-            time="12:00 PM"
-            priority="High"
-            priorityColor="bg-[#FFE9E1]"
-            priorityTextColor="text-[#FF7D53]"
-          />
-          <TaskCard
-            title="Create Low-fidelity Wireframe"
-            time="07:00 PM"
-            priority="Low"
-            priorityColor="bg-[#E3F2FF]"
-            priorityTextColor="text-[#0087FF]"
-          />
-        </div>
-
-        {/* Recent Task */}
-        <div className="bg-white rounded-[15px] p-4 shadow-[0px_4px_32px_rgba(0,0,0,0.04)] mb-6">
-          <div className="flex items-start justify-between mb-2">
-            <div>
-              <h4 className="text-sm text-[#24252C] mb-1">How to pitch a Design Sprint</h4>
-              <p className="text-[11px] text-[#6E6A7C]">About design sprint</p>
+          {tasks.length === 0 ? (
+            <div className="bg-white rounded-[15px] p-8 shadow-[0px_4px_32px_rgba(0,0,0,0.04)] text-center">
+              <p className="text-sm text-[#6E6A7C]">Нет задач на сегодня</p>
+              <a
+                href={`${basePath}/new-task`}
+                className="mt-4 inline-block text-sm text-[#5F33E1] font-semibold"
+              >
+                Создать задачу
+              </a>
             </div>
-            <div className="w-6 h-6 bg-[#FFE6D4] rounded-[7px]" />
-          </div>
+          ) : (
+            tasks.map((task) => {
+              const priorityColors = getPriorityColors(task.priority)
+              return (
+                <TaskCard
+                  key={task.id}
+                  task={task}
+                  basePath={basePath}
+                  onToggle={() => handleToggleTask(task.id)}
+                  onDelete={() => handleDeleteTask(task.id)}
+                  priorityColors={priorityColors}
+                />
+              )
+            })
+          )}
         </div>
       </div>
 
       {/* Bottom Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100">
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 shadow-[0px_-4px_32px_rgba(0,0,0,0.04)]">
         <div className="flex items-center justify-around px-4 py-3">
           <a href={`${basePath}/home`} className="flex flex-col items-center">
             <div className="w-6 h-6 mb-1">
@@ -258,51 +308,132 @@ export default function Home() {
       </div>
     </div>
   )
+
+  function handleLogout() {
+    logout()
+    window.location.href = `${basePath}/`
+  }
 }
 
-function TaskCard({
-  title,
-  time,
-  priority,
-  priorityColor,
-  priorityTextColor,
-}: {
-  title: string
-  time: string
-  priority: string
-  priorityColor: string
-  priorityTextColor: string
-}) {
+interface TaskCardProps {
+  task: Task
+  basePath: string
+  onToggle: () => void
+  onDelete: () => void
+  priorityColors: { bg: string; text: string }
+}
+
+function TaskCard({ task, basePath, onToggle, onDelete, priorityColors }: TaskCardProps) {
+  const isCompleted = task.status === 'completed'
+
+  const handleCardClick = (e: React.MouseEvent) => {
+    // Не переходим на редактирование, если кликнули на чекбокс или кнопку удаления
+    const target = e.target as HTMLElement
+    if (target.closest('button')) {
+      return
+    }
+    window.location.href = `${basePath}/new-task?id=${task.id}`
+  }
+
   return (
-    <div className="bg-white rounded-[15px] p-4 shadow-[0px_4px_32px_rgba(0,0,0,0.04)]">
-      <div className="flex items-start justify-between">
-        <div className="flex-1">
-          <h4 className="text-sm text-[#24252C] mb-2">{title}</h4>
-          <div className="flex items-center gap-2 mb-2">
+    <div
+      onClick={handleCardClick}
+      className="bg-white rounded-[15px] p-4 shadow-[0px_4px_32px_rgba(0,0,0,0.04)] cursor-pointer hover:shadow-[0px_4px_32px_rgba(0,0,0,0.08)] transition-shadow"
+    >
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex items-start gap-3 flex-1">
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+              onToggle()
+            }}
+            className={`mt-0.5 w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 ${
+              isCompleted
+                ? 'bg-[#5F33E1] border-[#5F33E1]'
+                : 'border-[#5F33E1] bg-white'
+            }`}
+          >
+            {isCompleted && (
+              <svg
+                className="w-3 h-3 text-white"
+                viewBox="0 0 12 12"
+                fill="none"
+              >
+                <path
+                  d="M2 6L5 9L10 2"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            )}
+          </button>
+          <div className="flex-1 min-w-0">
+            <h4
+              className={`text-sm text-[#24252C] mb-2 ${
+                isCompleted ? 'line-through opacity-60' : ''
+              }`}
+            >
+              {task.title}
+            </h4>
+            {task.description && (
+              <p className="text-[11px] text-[#6E6A7C] mb-2 line-clamp-2">
+                {task.description}
+              </p>
+            )}
+            <div className="flex items-center gap-2">
+              <svg
+                className="w-3.5 h-3.5 text-[#AB94FF] flex-shrink-0"
+                viewBox="0 0 14 14"
+                fill="none"
+              >
+                <circle
+                  cx="7"
+                  cy="7"
+                  r="6"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                />
+                <path
+                  d="M7 4V7L9 9"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                />
+              </svg>
+              <span className="text-[11px] text-[#AB94FF]">
+                {formatTime(task.time)}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div className="flex items-start gap-2 flex-shrink-0">
+          <div className={`${priorityColors.bg} px-2 py-1 rounded-[7px]`}>
+            <span className={`text-[9px] ${priorityColors.text} font-semibold`}>
+              {task.priority}
+            </span>
+          </div>
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+              onDelete()
+            }}
+            className="w-6 h-6 flex items-center justify-center text-[#6E6A7C] hover:text-red-500 transition-colors"
+          >
             <svg
-              className="w-3.5 h-3.5 text-[#AB94FF]"
-              viewBox="0 0 14 14"
+              className="w-4 h-4"
+              viewBox="0 0 16 16"
               fill="none"
             >
-              <circle
-                cx="7"
-                cy="7"
-                r="6"
-                stroke="currentColor"
-                strokeWidth="1.5"
-              />
               <path
-                d="M7 4V7L9 9"
+                d="M4 4L12 12M12 4L4 12"
                 stroke="currentColor"
                 strokeWidth="1.5"
                 strokeLinecap="round"
               />
             </svg>
-            <span className="text-[11px] text-[#AB94FF]">{time}</span>
-          </div>
-        </div>
-        <div className={`${priorityColor} px-2 py-1 rounded-[7px]`}>
-          <span className={`text-[9px] ${priorityTextColor}`}>{priority}</span>
+          </button>
         </div>
       </div>
     </div>
