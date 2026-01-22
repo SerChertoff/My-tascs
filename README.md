@@ -1,4 +1,4 @@
-
+# My-tascs
 
 # Task Sync
 
@@ -10,3 +10,9 @@
 - React 18
 - TypeScript
 - Tailwind CSS
+
+## Деплой
+
+Приложение автоматически деплоится на GitHub Pages через GitHub Actions.
+
+Доступно по адресу: https://serchertoff.github.io/My-tascs/
