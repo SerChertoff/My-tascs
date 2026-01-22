@@ -1,12 +1,47 @@
 'use client'
 
 import { useState } from 'react'
-import { getBasePath } from '../../lib/basePath'
+import { useBasePath } from '../../lib/useBasePath'
+import { register, login } from '../../lib/auth'
 
 export default function RegistrationPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const basePath = getBasePath()
+  const [error, setError] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const basePath = useBasePath()
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError('')
+    setIsLoading(true)
+
+    // Простая валидация
+    if (!email || !password) {
+      setError('Пожалуйста, заполните все поля')
+      setIsLoading(false)
+      return
+    }
+
+    if (password.length < 6) {
+      setError('Пароль должен содержать минимум 6 символов')
+      setIsLoading(false)
+      return
+    }
+
+    // Регистрация
+    const success = register(email, password)
+    
+    if (success) {
+      // Автоматический вход после регистрации
+      login(email, password)
+      // Редирект на главную страницу
+      window.location.href = `${basePath}/home`
+    } else {
+      setError('Пользователь с таким email уже существует')
+      setIsLoading(false)
+    }
+  }
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-white">
@@ -40,7 +75,12 @@ export default function RegistrationPage() {
           Registration
         </h1>
 
-        <div className="w-full max-w-[331px] space-y-4 mb-6">
+        <form onSubmit={handleSubmit} className="w-full max-w-[331px] space-y-4 mb-6">
+          {error && (
+            <div className="text-sm text-red-500 text-center mb-2">
+              {error}
+            </div>
+          )}
           <div className="relative">
             <input
               type="email"
@@ -48,6 +88,7 @@ export default function RegistrationPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full h-[30px] px-4 py-2 border border-[#5F33E1] rounded-[15px] text-sm placeholder:text-[#24252C] placeholder:opacity-60 focus:outline-none focus:ring-2 focus:ring-[#5F33E1]"
+              required
             />
           </div>
           <div className="relative">
@@ -57,26 +98,31 @@ export default function RegistrationPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full h-[30px] px-4 py-2 border border-[#5F33E1] rounded-[15px] text-sm placeholder:text-[#24252C] placeholder:opacity-60 focus:outline-none focus:ring-2 focus:ring-[#5F33E1]"
+              required
+              minLength={6}
             />
           </div>
-        </div>
-
-        <button className="w-[331px] h-[52px] bg-[#5F33E1] rounded-[14px] text-white font-semibold text-lg flex items-center justify-center relative mb-4">
-          Enter
-          <svg
-            className="absolute right-[24px] w-6 h-6"
-            viewBox="0 0 24 24"
-            fill="none"
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="w-[331px] h-[52px] bg-[#5F33E1] rounded-[14px] text-white font-semibold text-lg flex items-center justify-center relative mb-4 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <path
-              d="M13.16 6L18 12L13.16 18"
-              stroke="white"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </button>
+            {isLoading ? 'Регистрация...' : 'Enter'}
+            <svg
+              className="absolute right-[24px] w-6 h-6"
+              viewBox="0 0 24 24"
+              fill="none"
+            >
+              <path
+                d="M13.16 6L18 12L13.16 18"
+                stroke="white"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
+        </form>
 
         <a href={`${basePath}/login`} className="text-sm text-[#5F33E1]">
           Login

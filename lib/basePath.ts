@@ -5,7 +5,10 @@ export function getBasePath(): string {
     if (path.startsWith('/My-tascs')) {
       return '/My-tascs'
     }
+    // В разработке возвращаем пустую строку
+    return ''
   }
-  // На сервере или в разработке
-  return process.env.NODE_ENV === 'production' ? '/My-tascs' : ''
+  // На сервере (SSR) - для production используем basePath
+  // Для статического экспорта это не критично, так как все рендерится на клиенте
+  return ''
 }

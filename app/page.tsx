@@ -1,9 +1,9 @@
 'use client'
 
-import { getBasePath } from '../lib/basePath'
+import { useBasePath } from '../lib/useBasePath'
 
 export default function Page() {
-  const basePath = getBasePath()
+  const basePath = useBasePath()
   
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-white">

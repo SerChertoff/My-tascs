@@ -1,10 +1,31 @@
 'use client'
 
-import { getBasePath } from '../lib/basePath'
+import { useEffect, useState } from 'react'
+import { useBasePath } from '../lib/useBasePath'
+import { getCurrentUser, logout } from '../lib/auth'
 
 export default function Home() {
-  const basePath = getBasePath()
-  
+  const [user, setUser] = useState<{ email: string; name?: string } | null>(null)
+  const basePath = useBasePath()
+
+  useEffect(() => {
+    const currentUser = getCurrentUser()
+    if (!currentUser) {
+      window.location.href = `${basePath}/login`
+    } else {
+      setUser(currentUser)
+    }
+  }, [basePath])
+
+  const handleLogout = () => {
+    logout()
+    window.location.href = `${basePath}/`
+  }
+
+  if (!user) {
+    return null // Показываем ничего, пока проверяем авторизацию
+  }
+
   return (
     <div className="relative min-h-screen w-full bg-white pb-20">
       {/* Header */}
@@ -21,7 +42,7 @@ export default function Home() {
           </div>
           <div>
             <p className="text-sm text-[#24252C]">Hello!</p>
-            <p className="text-lg font-semibold text-[#24252C]">Livia Vaccaro</p>
+            <p className="text-lg font-semibold text-[#24252C]">{user.name || user.email}</p>
           </div>
         </div>
         <div className="flex items-center gap-4">
@@ -48,15 +69,17 @@ export default function Home() {
             </svg>
             <div className="absolute top-0 right-0 w-2 h-2 bg-[#5F33E1] rounded-full" />
           </div>
-          <svg
-            className="w-6 h-6 text-[#24252C]"
-            viewBox="0 0 24 24"
-            fill="none"
-          >
-            <circle cx="12" cy="12" r="1" fill="currentColor" />
-            <circle cx="19" cy="12" r="1" fill="currentColor" />
-            <circle cx="5" cy="12" r="1" fill="currentColor" />
-          </svg>
+          <button onClick={handleLogout}>
+            <svg
+              className="w-6 h-6 text-[#24252C]"
+              viewBox="0 0 24 24"
+              fill="none"
+            >
+              <circle cx="12" cy="12" r="1" fill="currentColor" />
+              <circle cx="19" cy="12" r="1" fill="currentColor" />
+              <circle cx="5" cy="12" r="1" fill="currentColor" />
+            </svg>
+          </button>
         </div>
       </div>
 
