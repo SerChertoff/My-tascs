@@ -1,3 +1,5 @@
+# My-tascs
+
 # Task Sync
 
 Приложение для управления задачами
@@ -8,4 +10,3 @@
 - React 18
 - TypeScript
 - Tailwind CSS
-
