@@ -1,10 +1,12 @@
 'use client'
 
 import { useState } from 'react'
+import { getBasePath } from '../../lib/basePath'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const basePath = getBasePath()
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-white">
@@ -18,9 +20,9 @@ export default function LoginPage() {
 
       {/* Основной контент */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6">
-        <a href="/" className="absolute top-8 left-6">
+        <a href={`${basePath}/`} className="absolute top-8 left-6">
           <svg
-            className="w-6 h-6 text-black"
+            className="w-6 h-6 text-[#24252C]"
             viewBox="0 0 24 24"
             fill="none"
           >
@@ -76,7 +78,7 @@ export default function LoginPage() {
           </svg>
         </button>
 
-        <a href="/registration" className="text-sm text-[#5F33E1]">
+        <a href={`${basePath}/registration`} className="text-sm text-[#5F33E1]">
           Registration
         </a>
       </div>

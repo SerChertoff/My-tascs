@@ -1,4 +1,10 @@
+'use client'
+
+import { getBasePath } from '../lib/basePath'
+
 export default function Page() {
+  const basePath = getBasePath()
+  
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-white">
       {/* Декоративные элементы - эллипсы с градиентами */}
@@ -20,7 +26,7 @@ export default function Page() {
       {/* Изображения */}
       <div className="absolute top-[147px] left-[131px] w-[159px] h-[184px]">
         <img
-          src="/images/woman-laptop.png"
+          src={`${basePath}/images/woman-laptop.png`}
           alt="Woman with laptop"
           width={159}
           height={184}
@@ -29,7 +35,7 @@ export default function Page() {
       </div>
       <div className="absolute top-[279px] left-[79px] w-[36px] h-[52px]">
         <img
-          src="/images/vase-tulips.png"
+          src={`${basePath}/images/vase-tulips.png`}
           alt="Vase with tulips"
           width={36}
           height={52}
@@ -38,7 +44,7 @@ export default function Page() {
       </div>
       <div className="absolute top-[69px] left-[104px] w-[40px] h-[50px]">
         <img
-          src="/images/stopwatch.png"
+          src={`${basePath}/images/stopwatch.png`}
           alt="Stopwatch"
           width={40}
           height={50}
@@ -47,7 +53,7 @@ export default function Page() {
       </div>
       <div className="absolute top-[225px] left-[245px] w-[62px] h-[42px]">
         <img
-          src="/images/notifications.png"
+          src={`${basePath}/images/notifications.png`}
           alt="Notifications"
           width={62}
           height={42}
@@ -56,7 +62,7 @@ export default function Page() {
       </div>
       <div className="absolute top-[180px] left-[84px] w-[26px] h-[26px]">
         <img
-          src="/images/pie-chart.png"
+          src={`${basePath}/images/pie-chart.png`}
           alt="Pie chart"
           width={26}
           height={26}
@@ -65,7 +71,7 @@ export default function Page() {
       </div>
       <div className="absolute top-[310px] left-[67px] w-[18px] h-[22px]">
         <img
-          src="/images/coffee-cup.png"
+          src={`${basePath}/images/coffee-cup.png`}
           alt="Coffee cup"
           width={18}
           height={22}
@@ -74,7 +80,7 @@ export default function Page() {
       </div>
       <div className="absolute top-[136px] left-[276px] w-[36px] h-[33px]">
         <img
-          src="/images/calendar.png"
+          src={`${basePath}/images/calendar.png`}
           alt="Calendar"
           width={36}
           height={33}
@@ -91,7 +97,7 @@ export default function Page() {
           This productive tool is designed to help you better manage your task project-wise conveniently!
         </p>
         <a
-          href="/login"
+          href={`${basePath}/login`}
           className="w-[331px] h-[52px] bg-[#5F33E1] rounded-[14px] text-white font-semibold text-lg flex items-center justify-center relative"
         >
           Let&apos;s Start

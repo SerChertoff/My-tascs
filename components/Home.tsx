@@ -1,6 +1,10 @@
 'use client'
 
+import { getBasePath } from '../lib/basePath'
+
 export default function Home() {
+  const basePath = getBasePath()
+  
   return (
     <div className="relative min-h-screen w-full bg-white pb-20">
       {/* Header */}
@@ -8,7 +12,7 @@ export default function Home() {
         <div className="flex items-center gap-4">
           <div className="w-[46px] h-[46px] rounded-full bg-gray-200 overflow-hidden">
             <img
-              src="/images/avatar.png"
+              src={`${basePath}/images/avatar.png`}
               alt="Avatar"
               width={46}
               height={46}
@@ -128,7 +132,7 @@ export default function Home() {
       {/* Bottom Navigation */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100">
         <div className="flex items-center justify-around px-4 py-3">
-          <a href="/home" className="flex flex-col items-center">
+          <a href={`${basePath}/home`} className="flex flex-col items-center">
             <div className="w-6 h-6 mb-1">
               <svg viewBox="0 0 24 24" fill="none" className="w-full h-full">
                 <path
@@ -141,7 +145,7 @@ export default function Home() {
               </svg>
             </div>
           </a>
-          <a href="/calendar" className="flex flex-col items-center">
+          <a href={`${basePath}/calendar`} className="flex flex-col items-center">
             <div className="w-6 h-6 mb-1">
               <svg viewBox="0 0 24 24" fill="none" className="w-full h-full">
                 <path
@@ -177,7 +181,7 @@ export default function Home() {
               </svg>
             </div>
           </a>
-          <a href="/new-task" className="flex flex-col items-center">
+          <a href={`${basePath}/new-task`} className="flex flex-col items-center">
             <div className="w-11 h-11 bg-[#5F33E1] rounded-full flex items-center justify-center shadow-[2px_10px_18px_rgba(95,51,225,0.49)]">
               <svg
                 className="w-6 h-6 text-white"
@@ -194,7 +198,7 @@ export default function Home() {
               </svg>
             </div>
           </a>
-          <a href="/tasks" className="flex flex-col items-center">
+          <a href={`${basePath}/tasks`} className="flex flex-col items-center">
             <div className="w-6 h-6 mb-1">
               <svg viewBox="0 0 24 24" fill="none" className="w-full h-full">
                 <path
@@ -207,7 +211,7 @@ export default function Home() {
               </svg>
             </div>
           </a>
-          <a href="/profile" className="flex flex-col items-center">
+          <a href={`${basePath}/profile`} className="flex flex-col items-center">
             <div className="w-6 h-6 mb-1">
               <svg viewBox="0 0 24 24" fill="none" className="w-full h-full">
                 <path
