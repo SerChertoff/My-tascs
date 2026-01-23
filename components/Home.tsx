@@ -13,6 +13,7 @@ import {
   getPriorityColors,
   formatTime,
 } from '../lib/tasks'
+import { toast } from '../lib/toast'
 import BottomNavigation from './BottomNavigation'
 
 export default function Home() {
@@ -58,14 +59,23 @@ export default function Home() {
   }
 
   const handleToggleTask = (id: string) => {
+    const task = tasks.find(t => t.id === id)
     toggleTaskStatus(id)
     loadTasks()
+    if (task) {
+      if (task.status === 'pending') {
+        toast.success('Задача выполнена!')
+      } else {
+        toast.info('Задача возвращена в список')
+      }
+    }
   }
 
   const handleDeleteTask = (id: string) => {
     if (confirm('Вы уверены, что хотите удалить эту задачу?')) {
       deleteTask(id)
       loadTasks()
+      toast.success('Задача удалена')
     }
   }
 

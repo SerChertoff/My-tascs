@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useBasePath } from '../../lib/useBasePath'
 import { getCurrentUser, logout, updateUser } from '../../lib/auth'
 import { getTaskStats } from '../../lib/tasks'
+import { toast } from '../../lib/toast'
 import PageHeader from '../../components/PageHeader'
 import BottomNavigation from '../../components/BottomNavigation'
 
@@ -48,23 +49,43 @@ export default function ProfilePage() {
       updateUser({ name: name.trim() })
       setUser({ ...user!, name: name.trim() })
       setIsEditing(false)
+      toast.success('Имя обновлено')
+    } else {
+      toast.error('Имя не может быть пустым')
     }
   }
 
   const handleLogout = () => {
-    logout()
-    window.location.href = `${basePath}/`
+    if (confirm('Вы уверены, что хотите выйти?')) {
+      logout()
+      toast.info('Выход выполнен')
+      setTimeout(() => {
+        window.location.href = `${basePath}/`
+      }, 500)
+    }
   }
 
   const handlePhotoSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
-    if (file && file.type.startsWith('image/')) {
+    if (file) {
+      if (!file.type.startsWith('image/')) {
+        toast.error('Пожалуйста, выберите изображение')
+        return
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error('Размер файла не должен превышать 5 МБ')
+        return
+      }
       const reader = new FileReader()
       reader.onloadend = () => {
         const avatarUrl = reader.result as string
         updateUser({ avatarUrl })
         setUser({ ...user!, avatarUrl })
         setShowPhotoOptions(false)
+        toast.success('Фото обновлено')
+      }
+      reader.onerror = () => {
+        toast.error('Ошибка при загрузке фото')
       }
       reader.readAsDataURL(file)
     }
@@ -78,13 +99,25 @@ export default function ProfilePage() {
     input.onchange = (e: Event) => {
       const target = e.target as HTMLInputElement
       const file = target.files?.[0]
-      if (file && file.type.startsWith('image/')) {
+      if (file) {
+        if (!file.type.startsWith('image/')) {
+          toast.error('Пожалуйста, выберите изображение')
+          return
+        }
+        if (file.size > 5 * 1024 * 1024) {
+          toast.error('Размер файла не должен превышать 5 МБ')
+          return
+        }
         const reader = new FileReader()
         reader.onloadend = () => {
           const avatarUrl = reader.result as string
           updateUser({ avatarUrl })
           setUser({ ...user!, avatarUrl })
           setShowPhotoOptions(false)
+          toast.success('Фото обновлено')
+        }
+        reader.onerror = () => {
+          toast.error('Ошибка при загрузке фото')
         }
         reader.readAsDataURL(file)
       }
@@ -93,11 +126,14 @@ export default function ProfilePage() {
   }
 
   const handleRemovePhoto = () => {
-    updateUser({ avatarUrl: '' })
-    const updatedUser = { ...user! }
-    delete updatedUser.avatarUrl
-    setUser(updatedUser)
-    setShowPhotoOptions(false)
+    if (confirm('Удалить фото профиля?')) {
+      updateUser({ avatarUrl: '' })
+      const updatedUser = { ...user! }
+      delete updatedUser.avatarUrl
+      setUser(updatedUser)
+      setShowPhotoOptions(false)
+      toast.success('Фото удалено')
+    }
   }
 
   if (!user) {

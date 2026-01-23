@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useBasePath } from '../../lib/useBasePath'
 import { getCurrentUser } from '../../lib/auth'
 import { addTask, updateTask, getTasks, TaskPriority, Task } from '../../lib/tasks'
+import { toast } from '../../lib/toast'
 import PageHeader from '../../components/PageHeader'
 import BottomNavigation from '../../components/BottomNavigation'
 
@@ -67,16 +68,19 @@ export default function NewTaskPage() {
 
     if (!title.trim()) {
       setError('Пожалуйста, введите название задачи')
+      toast.error('Пожалуйста, введите название задачи')
       return
     }
 
     if (!time.trim()) {
       setError('Пожалуйста, введите время')
+      toast.error('Пожалуйста, введите время')
       return
     }
 
     if (!date.trim()) {
       setError('Пожалуйста, выберите дату')
+      toast.error('Пожалуйста, выберите дату')
       return
     }
 
@@ -89,6 +93,7 @@ export default function NewTaskPage() {
           date: date.trim(),
           priority,
         })
+        toast.success('Задача обновлена!')
       } else {
         addTask({
           title: title.trim(),
@@ -97,10 +102,14 @@ export default function NewTaskPage() {
           date: date.trim(),
           priority,
         })
+        toast.success('Задача создана!')
       }
-      window.location.href = `${basePath}/home`
+      setTimeout(() => {
+        window.location.href = `${basePath}/home`
+      }, 500)
     } catch (err) {
       setError('Произошла ошибка при сохранении задачи')
+      toast.error('Произошла ошибка при сохранении задачи')
     }
   }
 

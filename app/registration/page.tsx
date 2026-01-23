@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useBasePath } from '../../lib/useBasePath'
 import { register, login } from '../../lib/auth'
+import { toast } from '../../lib/toast'
 
 export default function RegistrationPage() {
   const [email, setEmail] = useState('')
@@ -11,20 +12,34 @@ export default function RegistrationPage() {
   const [isLoading, setIsLoading] = useState(false)
   const basePath = useBasePath()
 
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return emailRegex.test(email)
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
     setIsLoading(true)
 
-    // Простая валидация
+    // Валидация
     if (!email || !password) {
       setError('Пожалуйста, заполните все поля')
+      toast.error('Пожалуйста, заполните все поля')
+      setIsLoading(false)
+      return
+    }
+
+    if (!validateEmail(email)) {
+      setError('Введите корректный email')
+      toast.error('Введите корректный email')
       setIsLoading(false)
       return
     }
 
     if (password.length < 6) {
       setError('Пароль должен содержать минимум 6 символов')
+      toast.error('Пароль должен содержать минимум 6 символов')
       setIsLoading(false)
       return
     }
@@ -33,12 +48,16 @@ export default function RegistrationPage() {
     const success = register(email, password)
     
     if (success) {
+      toast.success('Регистрация успешна!')
       // Автоматический вход после регистрации
       login(email, password)
-      // Редирект на главную страницу
-      window.location.href = `${basePath}/home`
+      // Небольшая задержка для показа уведомления
+      setTimeout(() => {
+        window.location.href = `${basePath}/home`
+      }, 500)
     } else {
       setError('Пользователь с таким email уже существует')
+      toast.error('Пользователь с таким email уже существует')
       setIsLoading(false)
     }
   }

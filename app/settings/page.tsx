@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useBasePath } from '../../lib/useBasePath'
 import { getCurrentUser, updateUser, getUsers, saveUser } from '../../lib/auth'
 import { getPomodoroSettings, savePomodoroSettings, PomodoroSettings } from '../../lib/pomodoroSettings'
+import { toast } from '../../lib/toast'
 import PageHeader from '../../components/PageHeader'
 import BottomNavigation from '../../components/BottomNavigation'
 
@@ -41,7 +42,12 @@ export default function SettingsPage() {
       }
       
       // Обновляем пароль, если он был введен
-      if (password.trim() && password.length >= 6) {
+      if (password.trim()) {
+        if (password.length < 6) {
+          toast.error('Пароль должен содержать минимум 6 символов')
+          setIsSaving(false)
+          return
+        }
         const users = getUsers()
         const userIndex = users.findIndex(u => u.email === email)
         if (userIndex >= 0) {
@@ -51,9 +57,11 @@ export default function SettingsPage() {
         }
       }
       
+      toast.success('Настройки профиля сохранены')
       setSaveMessage('Настройки профиля сохранены')
       setTimeout(() => setSaveMessage(''), 3000)
     } catch (error) {
+      toast.error('Ошибка при сохранении')
       setSaveMessage('Ошибка при сохранении')
     } finally {
       setIsSaving(false)
@@ -61,14 +69,29 @@ export default function SettingsPage() {
   }
 
   const handleSavePomodoro = () => {
+    if (pomodoroSettings.workInterval < 1 || pomodoroSettings.workInterval > 60) {
+      toast.error('Интервал работы должен быть от 1 до 60 минут')
+      return
+    }
+    if (pomodoroSettings.breakInterval < 1 || pomodoroSettings.breakInterval > 30) {
+      toast.error('Интервал перерыва должен быть от 1 до 30 минут')
+      return
+    }
+    if (pomodoroSettings.intervalCount < 1 || pomodoroSettings.intervalCount > 10) {
+      toast.error('Количество интервалов должно быть от 1 до 10')
+      return
+    }
+
     setIsSaving(true)
     setSaveMessage('')
     
     try {
       savePomodoroSettings(pomodoroSettings)
+      toast.success('Настройки Pomodoro сохранены')
       setSaveMessage('Настройки Pomodoro сохранены')
       setTimeout(() => setSaveMessage(''), 3000)
     } catch (error) {
+      toast.error('Ошибка при сохранении')
       setSaveMessage('Ошибка при сохранении')
     } finally {
       setIsSaving(false)

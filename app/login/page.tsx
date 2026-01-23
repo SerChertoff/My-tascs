@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useBasePath } from '../../lib/useBasePath'
 import { login } from '../../lib/auth'
+import { toast } from '../../lib/toast'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -11,14 +12,27 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false)
   const basePath = useBasePath()
 
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return emailRegex.test(email)
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
     setIsLoading(true)
 
-    // Простая валидация
+    // Валидация
     if (!email || !password) {
       setError('Пожалуйста, заполните все поля')
+      toast.error('Пожалуйста, заполните все поля')
+      setIsLoading(false)
+      return
+    }
+
+    if (!validateEmail(email)) {
+      setError('Введите корректный email')
+      toast.error('Введите корректный email')
       setIsLoading(false)
       return
     }
@@ -27,10 +41,14 @@ export default function LoginPage() {
     const success = login(email, password)
     
     if (success) {
-      // Редирект на главную страницу
-      window.location.href = `${basePath}/home`
+      toast.success('Вход выполнен успешно!')
+      // Небольшая задержка для показа уведомления
+      setTimeout(() => {
+        window.location.href = `${basePath}/home`
+      }, 500)
     } else {
       setError('Неверный email или пароль')
+      toast.error('Неверный email или пароль')
       setIsLoading(false)
     }
   }
