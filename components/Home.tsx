@@ -195,6 +195,51 @@ export default function Home() {
           </div>
         </div>
 
+        {/* Productivity Tools */}
+        <div className="grid grid-cols-2 gap-4 mb-6">
+          <a
+            href={`${basePath}/pomodoro`}
+            className="bg-gradient-to-br from-[#5F33E1] to-[#8B6FE8] rounded-[15px] p-4 shadow-[0px_4px_32px_rgba(0,0,0,0.04)] text-white"
+          >
+            <div className="flex items-center gap-2 mb-2">
+              <svg
+                className="w-6 h-6"
+                viewBox="0 0 24 24"
+                fill="none"
+              >
+                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
+                <path
+                  d="M12 6V12L16 14"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+              </svg>
+              <h3 className="text-sm font-semibold">Pomodoro</h3>
+            </div>
+            <p className="text-xs text-white/80">Focus timer</p>
+          </a>
+          <a
+            href={`${basePath}/time-blocking`}
+            className="bg-gradient-to-br from-[#6E6A7C] to-[#8B8A9C] rounded-[15px] p-4 shadow-[0px_4px_32px_rgba(0,0,0,0.04)] text-white"
+          >
+            <div className="flex items-center gap-2 mb-2">
+              <svg
+                className="w-6 h-6"
+                viewBox="0 0 24 24"
+                fill="none"
+              >
+                <rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="2" />
+                <path d="M3 10H21" stroke="currentColor" strokeWidth="2" />
+                <path d="M8 2V6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                <path d="M16 2V6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+              </svg>
+              <h3 className="text-sm font-semibold">Time Blocking</h3>
+            </div>
+            <p className="text-xs text-white/80">Schedule your day</p>
+          </a>
+        </div>
+
         {/* Statistics Title */}
         <h3 className="text-lg font-semibold text-[#24252C] mb-4">Statistics</h3>
 

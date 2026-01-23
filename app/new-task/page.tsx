@@ -30,6 +30,8 @@ export default function NewTaskPage() {
       if (typeof window !== 'undefined') {
         const params = new URLSearchParams(window.location.search)
         const id = params.get('id')
+        const dateParam = params.get('date')
+        
         if (id) {
           const tasks = getTasks()
           const task = tasks.find(t => t.id === id)
@@ -43,8 +45,8 @@ export default function NewTaskPage() {
             setPriority(task.priority)
           }
         } else {
-          // Устанавливаем сегодняшнюю дату по умолчанию
-          const today = new Date().toISOString().split('T')[0]
+          // Устанавливаем дату из параметра или сегодняшнюю дату по умолчанию
+          const today = dateParam || new Date().toISOString().split('T')[0]
           setDate(today)
           // Устанавливаем текущее время + 1 час по умолчанию
           const now = new Date()
