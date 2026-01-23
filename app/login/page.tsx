@@ -7,7 +7,7 @@ import { toast } from '../../lib/toast'
 import { useTranslation } from '../../lib/useTranslation'
 
 export default function LoginPage() {
-  const { t } = useTranslation()
+  const { t, isClient } = useTranslation()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -84,8 +84,8 @@ export default function LoginPage() {
           </svg>
         </a>
 
-        <h1 className="text-2xl font-semibold text-[#24252C] mb-8 text-center">
-          {t.auth.login}
+        <h1 className="text-2xl font-semibold text-[#24252C] mb-8 text-center" suppressHydrationWarning>
+          {isClient ? t.auth.login : 'Login'}
         </h1>
 
         <form onSubmit={handleSubmit} className="w-full max-w-[331px] space-y-4 mb-6">

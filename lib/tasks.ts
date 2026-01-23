@@ -27,12 +27,26 @@ export function getTasks(): Task[] {
 // Сохранить задачи
 function saveTasks(tasks: Task[]): void {
   if (typeof window === 'undefined') return
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks))
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks))
+    console.log('Tasks saved successfully:', tasks.length, 'tasks')
+  } catch (error) {
+    console.error('Error saving tasks:', error)
+    throw error
+  }
 }
 
 // Добавить задачу
 export function addTask(task: Omit<Task, 'id' | 'createdAt' | 'updatedAt' | 'status'>): Task {
+  if (typeof window === 'undefined') {
+    console.error('addTask called on server side')
+    throw new Error('Cannot add task on server side')
+  }
+  
+  console.log('Adding task:', task)
   const tasks = getTasks()
+  console.log('Current tasks:', tasks.length)
+  
   const newTask: Task = {
     ...task,
     id: Date.now().toString(),
@@ -40,8 +54,15 @@ export function addTask(task: Omit<Task, 'id' | 'createdAt' | 'updatedAt' | 'sta
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   }
+  
+  console.log('New task created:', newTask)
   tasks.push(newTask)
   saveTasks(tasks)
+  
+  // Проверяем, что задача действительно сохранилась
+  const savedTasks = getTasks()
+  console.log('Tasks after save:', savedTasks.length)
+  
   return newTask
 }
 

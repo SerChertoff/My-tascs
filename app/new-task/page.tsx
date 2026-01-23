@@ -23,49 +23,59 @@ export default function NewTaskPage() {
   const basePath = useBasePath()
 
   useEffect(() => {
+    // Убеждаемся, что код выполняется только на клиенте
+    if (typeof window === 'undefined') return
+    
     const currentUser = getCurrentUser()
     if (!currentUser) {
       window.location.href = `${basePath}/login`
-    } else {
-      setUser(currentUser)
-      
-      // Проверяем, есть ли ID задачи в URL для редактирования
-      if (typeof window !== 'undefined') {
-        const params = new URLSearchParams(window.location.search)
-        const id = params.get('id')
-        const dateParam = params.get('date')
-        
-        if (id) {
-          const tasks = getTasks()
-          const task = tasks.find(t => t.id === id)
-          if (task) {
-            setIsEdit(true)
-            setTaskId(id)
-            setTitle(task.title)
-            setDescription(task.description || '')
-            setTime(task.time)
-            setDate(task.date)
-            setPriority(task.priority)
-          }
-        } else {
-          // Устанавливаем дату из параметра или сегодняшнюю дату по умолчанию
-          const today = dateParam || new Date().toISOString().split('T')[0]
-          setDate(today)
-          // Устанавливаем текущее время + 1 час по умолчанию
-          const now = new Date()
-          now.setHours(now.getHours() + 1)
-          const hours = now.getHours()
-          const minutes = now.getMinutes().toString().padStart(2, '0')
-          const ampm = hours >= 12 ? 'PM' : 'AM'
-          const displayHour = hours % 12 || 12
-          setTime(`${displayHour}:${minutes} ${ampm}`)
+      return
+    }
+    
+    setUser(currentUser)
+    
+    // Проверяем, есть ли ID задачи в URL для редактирования
+    const params = new URLSearchParams(window.location.search)
+    const id = params.get('id')
+    const dateParam = params.get('date')
+    
+    if (id) {
+      try {
+        const tasks = getTasks()
+        const task = tasks.find(t => t.id === id)
+        if (task) {
+          setIsEdit(true)
+          setTaskId(id)
+          setTitle(task.title)
+          setDescription(task.description || '')
+          setTime(task.time)
+          setDate(task.date)
+          setPriority(task.priority)
         }
+      } catch (error) {
+        console.error('Error loading task:', error)
       }
+    } else {
+      // Устанавливаем дату из параметра или сегодняшнюю дату по умолчанию
+      const today = dateParam || new Date().toISOString().split('T')[0]
+      setDate(today)
+      // Устанавливаем текущее время + 1 час по умолчанию
+      const now = new Date()
+      now.setHours(now.getHours() + 1)
+      const hours = now.getHours()
+      const minutes = now.getMinutes().toString().padStart(2, '0')
+      const ampm = hours >= 12 ? 'PM' : 'AM'
+      const displayHour = hours % 12 || 12
+      setTime(`${displayHour}:${minutes} ${ampm}`)
     }
   }, [basePath])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    
+    // Убеждаемся, что код выполняется только на клиенте
+    if (typeof window === 'undefined') return
+    
     setError('')
 
     if (!title.trim()) {
@@ -87,29 +97,42 @@ export default function NewTaskPage() {
     }
 
     try {
+      console.log('Submitting task form:', { title, time, date, priority, isEdit, taskId })
+      
       if (isEdit && taskId) {
-        updateTask(taskId, {
+        const updated = updateTask(taskId, {
           title: title.trim(),
           description: description.trim() || undefined,
           time: time.trim(),
           date: date.trim(),
           priority,
         })
+        if (!updated) {
+          throw new Error('Task not found')
+        }
+        console.log('Task updated:', updated)
         toast.success(t.tasks.taskUpdated)
       } else {
-        addTask({
+        const newTask = addTask({
           title: title.trim(),
           description: description.trim() || undefined,
           time: time.trim(),
           date: date.trim(),
           priority,
         })
+        console.log('Task created:', newTask)
         toast.success(t.tasks.taskCreated)
       }
+      
+      // Проверяем, что задача сохранилась перед редиректом
+      const allTasks = getTasks()
+      console.log('All tasks after save:', allTasks)
+      
       setTimeout(() => {
         window.location.href = `${basePath}/home`
       }, 500)
     } catch (err) {
+      console.error('Error saving task:', err)
       setError(t.tasks.saveError)
       toast.error(t.tasks.saveError)
     }
@@ -126,11 +149,11 @@ export default function NewTaskPage() {
   ]
 
   return (
-    <div className="relative min-h-screen w-full bg-white">
+    <div className="relative min-h-screen w-full bg-white pb-24">
       <PageHeader title={isEdit ? t.tasks.editTask : t.tasks.newTask} />
 
       {/* Form */}
-      <form onSubmit={handleSubmit} className="px-6 py-6 space-y-6">
+      <form onSubmit={handleSubmit} className="px-6 py-6 pb-10 space-y-6">
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-[15px] p-4">
             <p className="text-sm text-red-600">{error}</p>
