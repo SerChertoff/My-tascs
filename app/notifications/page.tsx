@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react'
 import { useBasePath } from '../../lib/useBasePath'
 import { getCurrentUser } from '../../lib/auth'
 import { getTasks, Task, formatTime, getPriorityColors } from '../../lib/tasks'
+import PageHeader from '../../components/PageHeader'
+import BottomNavigation from '../../components/BottomNavigation'
 
 export default function NotificationsPage() {
   const [user, setUser] = useState<{ email: string; name?: string } | null>(null)
@@ -52,26 +54,7 @@ export default function NotificationsPage() {
 
   return (
     <div className="relative min-h-screen w-full bg-white pb-24">
-      {/* Header */}
-      <div className="flex items-center justify-between px-6 pt-7 pb-4 border-b border-gray-100">
-        <a href={`${basePath}/home`} className="w-6 h-6 flex items-center justify-center">
-          <svg
-            className="w-6 h-6 text-[#24252C]"
-            viewBox="0 0 24 24"
-            fill="none"
-          >
-            <path
-              d="M15 18L9 12L15 6"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </a>
-        <h1 className="text-lg font-semibold text-[#24252C]">Notifications</h1>
-        <div className="w-6 h-6" /> {/* Spacer */}
-      </div>
+      <PageHeader title="Notifications" />
 
       {/* Notifications List */}
       <div className="px-6 py-6">
@@ -213,6 +196,7 @@ export default function NotificationsPage() {
           </div>
         )}
       </div>
+      <BottomNavigation />
     </div>
   )
 }

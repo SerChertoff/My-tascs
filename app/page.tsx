@@ -23,68 +23,68 @@ export default function Page() {
       <div className="absolute top-[362px] left-[281px] w-1 h-1 bg-[#7FFCAA] rounded-full" />
       <div className="absolute top-[405px] left-[176px] w-1 h-1 bg-[#A4E7F9] rounded-full" />
 
-      {/* Изображения */}
-      <div className="absolute top-[147px] left-[131px] w-[159px] h-[184px]">
+      {/* Изображения с анимациями */}
+      <div className="absolute top-[147px] left-[131px] w-[159px] h-[184px] animate-fade-in" style={{ animationDelay: '0.1s' }}>
         <img
           src={`${basePath}/images/woman-laptop.png`}
           alt="Woman with laptop"
           width={159}
           height={184}
-          className="object-contain"
+          className="object-contain drop-shadow-lg"
         />
       </div>
-      <div className="absolute top-[279px] left-[79px] w-[36px] h-[52px]">
+      <div className="absolute top-[279px] left-[79px] w-[36px] h-[52px] animate-fade-in" style={{ animationDelay: '0.2s' }}>
         <img
           src={`${basePath}/images/vase-tulips.png`}
           alt="Vase with tulips"
           width={36}
           height={52}
-          className="object-contain"
+          className="object-contain drop-shadow-md"
         />
       </div>
-      <div className="absolute top-[69px] left-[104px] w-[40px] h-[50px]">
+      <div className="absolute top-[69px] left-[104px] w-[40px] h-[50px] animate-fade-in" style={{ animationDelay: '0.3s' }}>
         <img
           src={`${basePath}/images/stopwatch.png`}
           alt="Stopwatch"
           width={40}
           height={50}
-          className="object-contain"
+          className="object-contain drop-shadow-md"
         />
       </div>
-      <div className="absolute top-[225px] left-[245px] w-[62px] h-[42px]">
+      <div className="absolute top-[225px] left-[245px] w-[62px] h-[42px] animate-fade-in" style={{ animationDelay: '0.4s' }}>
         <img
           src={`${basePath}/images/notifications.png`}
           alt="Notifications"
           width={62}
           height={42}
-          className="object-contain"
+          className="object-contain drop-shadow-md"
         />
       </div>
-      <div className="absolute top-[180px] left-[84px] w-[26px] h-[26px]">
+      <div className="absolute top-[180px] left-[84px] w-[26px] h-[26px] animate-fade-in" style={{ animationDelay: '0.5s' }}>
         <img
           src={`${basePath}/images/pie-chart.png`}
           alt="Pie chart"
           width={26}
           height={26}
-          className="object-contain"
+          className="object-contain drop-shadow-md"
         />
       </div>
-      <div className="absolute top-[310px] left-[67px] w-[18px] h-[22px]">
+      <div className="absolute top-[310px] left-[67px] w-[18px] h-[22px] animate-fade-in" style={{ animationDelay: '0.6s' }}>
         <img
           src={`${basePath}/images/coffee-cup.png`}
           alt="Coffee cup"
           width={18}
           height={22}
-          className="object-contain"
+          className="object-contain drop-shadow-md"
         />
       </div>
-      <div className="absolute top-[136px] left-[276px] w-[36px] h-[33px]">
+      <div className="absolute top-[136px] left-[276px] w-[36px] h-[33px] animate-fade-in" style={{ animationDelay: '0.7s' }}>
         <img
           src={`${basePath}/images/calendar.png`}
           alt="Calendar"
           width={36}
           height={33}
-          className="object-contain"
+          className="object-contain drop-shadow-md"
         />
       </div>
 

@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react'
 import { useBasePath } from '../../lib/useBasePath'
 import { getCurrentUser } from '../../lib/auth'
 import { addTask, updateTask, getTasks, TaskPriority, Task } from '../../lib/tasks'
+import PageHeader from '../../components/PageHeader'
+import BottomNavigation from '../../components/BottomNavigation'
 
 export default function NewTaskPage() {
   const [user, setUser] = useState<{ email: string; name?: string } | null>(null)
@@ -112,28 +114,7 @@ export default function NewTaskPage() {
 
   return (
     <div className="relative min-h-screen w-full bg-white">
-      {/* Header */}
-      <div className="flex items-center justify-between px-6 pt-7 pb-4 border-b border-gray-100">
-        <a href={`${basePath}/home`} className="w-6 h-6 flex items-center justify-center">
-          <svg
-            className="w-6 h-6 text-[#24252C]"
-            viewBox="0 0 24 24"
-            fill="none"
-          >
-            <path
-              d="M15 18L9 12L15 6"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </a>
-        <h1 className="text-lg font-semibold text-[#24252C]">
-          {isEdit ? 'Edit Task' : 'New Task'}
-        </h1>
-        <div className="w-6 h-6" /> {/* Spacer */}
-      </div>
+      <PageHeader title={isEdit ? 'Edit Task' : 'New Task'} />
 
       {/* Form */}
       <form onSubmit={handleSubmit} className="px-6 py-6 space-y-6">
@@ -198,6 +179,7 @@ export default function NewTaskPage() {
               className="w-full h-[52px] px-4 border border-[#5F33E1] rounded-[15px] text-sm placeholder:text-[#24252C] placeholder:opacity-60 focus:outline-none focus:ring-2 focus:ring-[#5F33E1]"
               required
             />
+            <p className="text-xs text-[#6E6A7C] mt-1">Format: HH:MM AM/PM (e.g., 10:00 AM)</p>
           </div>
         </div>
 
@@ -253,6 +235,7 @@ export default function NewTaskPage() {
           </svg>
         </button>
       </form>
+      <BottomNavigation />
     </div>
   )
 }

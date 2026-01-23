@@ -81,3 +81,13 @@ export function getCurrentUser(): { email: string; name?: string } | null {
 export function isAuthenticated(): boolean {
   return getCurrentUser() !== null
 }
+
+// Обновить данные пользователя
+export function updateUser(updates: { name?: string }): void {
+  if (typeof window === 'undefined') return
+  const currentUser = getCurrentUser()
+  if (currentUser) {
+    const updatedUser = { ...currentUser, ...updates }
+    localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(updatedUser))
+  }
+}
