@@ -16,7 +16,7 @@ import {
 import BottomNavigation from './BottomNavigation'
 
 export default function Home() {
-  const [user, setUser] = useState<{ email: string; name?: string } | null>(null)
+  const [user, setUser] = useState<{ email: string; name?: string; avatarUrl?: string } | null>(null)
   const [tasks, setTasks] = useState<Task[]>([])
   const [stats, setStats] = useState(getTaskStats())
   const [pendingTasksCount, setPendingTasksCount] = useState(0)

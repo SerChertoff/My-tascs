@@ -4,6 +4,7 @@ export interface User {
   email: string
   password: string
   name?: string
+  avatarUrl?: string
 }
 
 const STORAGE_KEY = 'task-sync-users'
@@ -55,7 +56,7 @@ export function login(email: string, password: string): boolean {
   
   if (user) {
     if (typeof window !== 'undefined') {
-      localStorage.setItem(CURRENT_USER_KEY, JSON.stringify({ email: user.email, name: user.name }))
+      localStorage.setItem(CURRENT_USER_KEY, JSON.stringify({ email: user.email, name: user.name, avatarUrl: user.avatarUrl }))
     }
     return true
   }
@@ -71,7 +72,7 @@ export function logout(): void {
 }
 
 // Получить текущего пользователя
-export function getCurrentUser(): { email: string; name?: string } | null {
+export function getCurrentUser(): { email: string; name?: string; avatarUrl?: string } | null {
   if (typeof window === 'undefined') return null
   const userJson = localStorage.getItem(CURRENT_USER_KEY)
   return userJson ? JSON.parse(userJson) : null
@@ -83,11 +84,41 @@ export function isAuthenticated(): boolean {
 }
 
 // Обновить данные пользователя
-export function updateUser(updates: { name?: string }): void {
+export function updateUser(updates: { name?: string; avatarUrl?: string }): void {
   if (typeof window === 'undefined') return
   const currentUser = getCurrentUser()
   if (currentUser) {
-    const updatedUser = { ...currentUser, ...updates }
+    const updatedUser: { email: string; name?: string; avatarUrl?: string } = { ...currentUser }
+    
+    // Обновляем поля
+    if (updates.name !== undefined) {
+      updatedUser.name = updates.name
+    }
+    if (updates.avatarUrl !== undefined) {
+      if (updates.avatarUrl === null || updates.avatarUrl === '') {
+        delete updatedUser.avatarUrl
+      } else {
+        updatedUser.avatarUrl = updates.avatarUrl
+      }
+    }
+    
     localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(updatedUser))
+    
+    // Также обновляем в списке пользователей
+    const users = getUsers()
+    const userIndex = users.findIndex(u => u.email === currentUser.email)
+    if (userIndex >= 0) {
+      if (updates.name !== undefined) {
+        users[userIndex].name = updates.name
+      }
+      if (updates.avatarUrl !== undefined) {
+        if (updates.avatarUrl === null || updates.avatarUrl === '') {
+          delete users[userIndex].avatarUrl
+        } else {
+          users[userIndex].avatarUrl = updates.avatarUrl
+        }
+      }
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(users))
+    }
   }
 }
