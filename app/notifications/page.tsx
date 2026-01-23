@@ -4,10 +4,12 @@ import { useState, useEffect } from 'react'
 import { useBasePath } from '../../lib/useBasePath'
 import { getCurrentUser } from '../../lib/auth'
 import { getTasks, Task, formatTime, getPriorityColors } from '../../lib/tasks'
+import { useTranslation } from '../../lib/useTranslation'
 import PageHeader from '../../components/PageHeader'
 import BottomNavigation from '../../components/BottomNavigation'
 
 export default function NotificationsPage() {
+  const { t } = useTranslation()
   const [user, setUser] = useState<{ email: string; name?: string } | null>(null)
   const [upcomingTasks, setUpcomingTasks] = useState<Task[]>([])
   const basePath = useBasePath()
@@ -54,7 +56,7 @@ export default function NotificationsPage() {
 
   return (
     <div className="relative min-h-screen w-full bg-white pb-24">
-      <PageHeader title="Notifications" />
+      <PageHeader title={t.notifications.notifications} />
 
       {/* Notifications List */}
       <div className="px-6 py-6">
@@ -82,7 +84,7 @@ export default function NotificationsPage() {
                 />
               </svg>
             </div>
-            <p className="text-sm text-[#6E6A7C] mb-2">Нет уведомлений</p>
+            <p className="text-sm text-[#6E6A7C] mb-2">{t.notifications.noNotifications}</p>
             <p className="text-xs text-[#6E6A7C] opacity-60">
               У вас нет предстоящих задач
             </p>

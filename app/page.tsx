@@ -1,8 +1,10 @@
 'use client'
 
 import { useBasePath } from '../lib/useBasePath'
+import { useTranslation } from '../lib/useTranslation'
 
 export default function Page() {
+  const { t } = useTranslation()
   const basePath = useBasePath()
   
   return (
@@ -91,16 +93,16 @@ export default function Page() {
       {/* Основной контент */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6">
         <h1 className="text-2xl font-semibold text-[#24252C] mb-4 text-center">
-          Task Sync
+          {t.start.taskSync}
         </h1>
         <p className="text-sm text-[#6E6A7C] text-center mb-8 max-w-[266px] leading-relaxed">
-          This productive tool is designed to help you better manage your task project-wise conveniently!
+          {t.start.description}
         </p>
         <a
           href={`${basePath}/login`}
           className="w-[331px] h-[52px] bg-[#5F33E1] rounded-[14px] text-white font-semibold text-lg flex items-center justify-center relative"
         >
-          Let&apos;s Start
+          {t.start.letsStart}
           <svg
             className="absolute right-[24px] w-6 h-6"
             viewBox="0 0 24 24"

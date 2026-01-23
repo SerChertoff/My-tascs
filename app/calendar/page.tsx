@@ -4,10 +4,12 @@ import { useState, useEffect } from 'react'
 import { useBasePath } from '../../lib/useBasePath'
 import { getCurrentUser } from '../../lib/auth'
 import { getTasks, Task, formatTime, getPriorityColors } from '../../lib/tasks'
+import { useTranslation } from '../../lib/useTranslation'
 import PageHeader from '../../components/PageHeader'
 import BottomNavigation from '../../components/BottomNavigation'
 
 export default function CalendarPage() {
+  const { t } = useTranslation()
   const [user, setUser] = useState<{ email: string; name?: string } | null>(null)
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0])
   const [tasks, setTasks] = useState<Task[]>([])
@@ -100,7 +102,7 @@ export default function CalendarPage() {
   return (
     <div className="relative min-h-screen w-full bg-white pb-24">
       <PageHeader
-        title="Calendar"
+        title={t.calendar.calendar}
         rightAction={
           <a href={`${basePath}/new-task`} className="w-6 h-6 flex items-center justify-center hover:opacity-70 transition-opacity">
             <svg
@@ -223,7 +225,7 @@ export default function CalendarPage() {
           
           {selectedDateTasks.length === 0 ? (
             <div className="bg-white rounded-[15px] p-8 shadow-[0px_4px_32px_rgba(0,0,0,0.04)] text-center">
-              <p className="text-sm text-[#6E6A7C]">Нет задач на эту дату</p>
+              <p className="text-sm text-[#6E6A7C]">{t.calendar.noTasksOnDate}</p>
               <a
                 href={`${basePath}/new-task`}
                 className="mt-4 inline-block text-sm text-[#5F33E1] font-semibold"

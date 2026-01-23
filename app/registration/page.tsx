@@ -4,10 +4,13 @@ import { useState } from 'react'
 import { useBasePath } from '../../lib/useBasePath'
 import { register, login } from '../../lib/auth'
 import { toast } from '../../lib/toast'
+import { useTranslation } from '../../lib/useTranslation'
 
 export default function RegistrationPage() {
+  const { t } = useTranslation()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const basePath = useBasePath()
@@ -24,22 +27,22 @@ export default function RegistrationPage() {
 
     // Валидация
     if (!email || !password) {
-      setError('Пожалуйста, заполните все поля')
-      toast.error('Пожалуйста, заполните все поля')
+      setError(t.auth.fillAllFields)
+      toast.error(t.auth.fillAllFields)
       setIsLoading(false)
       return
     }
 
     if (!validateEmail(email)) {
-      setError('Введите корректный email')
-      toast.error('Введите корректный email')
+      setError(t.auth.invalidEmail)
+      toast.error(t.auth.invalidEmail)
       setIsLoading(false)
       return
     }
 
     if (password.length < 6) {
-      setError('Пароль должен содержать минимум 6 символов')
-      toast.error('Пароль должен содержать минимум 6 символов')
+      setError(t.auth.passwordMinLength)
+      toast.error(t.auth.passwordMinLength)
       setIsLoading(false)
       return
     }
@@ -48,7 +51,7 @@ export default function RegistrationPage() {
     const success = register(email, password)
     
     if (success) {
-      toast.success('Регистрация успешна!')
+      toast.success(t.auth.registrationSuccess)
       // Автоматический вход после регистрации
       login(email, password)
       // Небольшая задержка для показа уведомления
@@ -56,8 +59,8 @@ export default function RegistrationPage() {
         window.location.href = `${basePath}/home`
       }, 500)
     } else {
-      setError('Пользователь с таким email уже существует')
-      toast.error('Пользователь с таким email уже существует')
+      setError(t.auth.alreadyExists)
+      toast.error(t.auth.alreadyExists)
       setIsLoading(false)
     }
   }
@@ -91,7 +94,7 @@ export default function RegistrationPage() {
         </a>
 
         <h1 className="text-2xl font-semibold text-[#24252C] mb-8 text-center">
-          Registration
+          {t.auth.registration}
         </h1>
 
         <form onSubmit={handleSubmit} className="w-full max-w-[331px] space-y-4 mb-6">
@@ -103,7 +106,7 @@ export default function RegistrationPage() {
           <div className="relative">
             <input
               type="email"
-              placeholder="Email"
+              placeholder={t.auth.email}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full h-[30px] px-4 py-2 border border-[#5F33E1] rounded-[15px] text-sm placeholder:text-[#24252C] placeholder:opacity-60 focus:outline-none focus:ring-2 focus:ring-[#5F33E1]"
@@ -112,21 +115,63 @@ export default function RegistrationPage() {
           </div>
           <div className="relative">
             <input
-              type="password"
-              placeholder="Password"
+              type={showPassword ? 'text' : 'password'}
+              placeholder={t.auth.password}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full h-[30px] px-4 py-2 border border-[#5F33E1] rounded-[15px] text-sm placeholder:text-[#24252C] placeholder:opacity-60 focus:outline-none focus:ring-2 focus:ring-[#5F33E1]"
+              className="w-full h-[30px] px-4 py-2 pr-12 border border-[#5F33E1] rounded-[15px] text-sm placeholder:text-[#24252C] placeholder:opacity-60 focus:outline-none focus:ring-2 focus:ring-[#5F33E1]"
               required
               minLength={6}
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6E6A7C] hover:text-[#5F33E1] transition-colors"
+            >
+              {showPassword ? (
+                <svg
+                  className="w-5 h-5"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                >
+                  <path
+                    d="M17.94 17.94C16.2306 19.243 14.1491 19.9649 12 20C5 20 1 12 1 12C2.24389 9.68192 3.96914 7.65663 6.06 6.06M9.9 4.24C10.5883 4.0789 11.2931 3.99836 12 4C19 4 23 12 23 12C22.393 13.1356 21.6691 14.2048 20.84 15.19M14.12 14.12C13.8454 14.4148 13.5141 14.6512 13.1462 14.8151C12.7782 14.9791 12.3809 15.0673 11.9781 15.0744C11.5753 15.0815 11.1751 15.0074 10.8016 14.8565C10.4281 14.7056 10.0887 14.481 9.80385 14.1962C9.51897 13.9113 9.29441 13.5719 9.14351 13.1984C8.9926 12.8249 8.91853 12.4247 8.92564 12.0219C8.93274 11.6191 9.02091 11.2218 9.18488 10.8538C9.34884 10.4859 9.58525 10.1546 9.88 9.88M1 1L23 23"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  className="w-5 h-5"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                >
+                  <path
+                    d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              )}
+            </button>
           </div>
           <button
             type="submit"
             disabled={isLoading}
             className="w-[331px] h-[52px] bg-[#5F33E1] rounded-[14px] text-white font-semibold text-lg flex items-center justify-center relative mb-4 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isLoading ? 'Регистрация...' : 'Enter'}
+            {isLoading ? t.common.loading : t.auth.enter}
             <svg
               className="absolute right-[24px] w-6 h-6"
               viewBox="0 0 24 24"
@@ -144,7 +189,7 @@ export default function RegistrationPage() {
         </form>
 
         <a href={`${basePath}/login`} className="text-sm text-[#5F33E1]">
-          Login
+          {t.auth.login}
         </a>
       </div>
     </div>

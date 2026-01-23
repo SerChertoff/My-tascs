@@ -4,12 +4,14 @@ import { useState, useEffect, useRef } from 'react'
 import { useBasePath } from '../../lib/useBasePath'
 import { getCurrentUser } from '../../lib/auth'
 import { getPomodoroSettings } from '../../lib/pomodoroSettings'
+import { useTranslation } from '../../lib/useTranslation'
 import PageHeader from '../../components/PageHeader'
 import BottomNavigation from '../../components/BottomNavigation'
 
 type TimerMode = 'work' | 'shortBreak' | 'longBreak'
 
 export default function PomodoroPage() {
+  const { t } = useTranslation()
   const [user, setUser] = useState<{ email: string; name?: string; avatarUrl?: string } | null>(null)
   const [settings, setSettings] = useState(getPomodoroSettings())
   const [timeLeft, setTimeLeft] = useState(settings.workInterval * 60)
@@ -123,7 +125,7 @@ export default function PomodoroPage() {
 
   return (
     <div className="relative min-h-screen w-full bg-white pb-24">
-      <PageHeader title="Pomodoro" />
+      <PageHeader title={t.pomodoro.pomodoro} />
 
       <div className="px-6 py-6 space-y-6">
         {/* Timer Display */}
@@ -157,7 +159,7 @@ export default function PomodoroPage() {
                 {formatTime(timeLeft)}
               </div>
               <div className="text-sm text-[#6E6A7C]">
-                {mode === 'work' ? 'Focus Time' : mode === 'shortBreak' ? 'Short Break' : 'Long Break'}
+                {mode === 'work' ? t.pomodoro.focusTime : mode === 'shortBreak' ? t.pomodoro.shortBreak : t.pomodoro.longBreak}
               </div>
             </div>
           </div>
@@ -227,7 +229,7 @@ export default function PomodoroPage() {
                   : 'bg-gray-100 text-[#6E6A7C]'
               }`}
             >
-              Work
+              {t.pomodoro.work}
             </button>
             <button
               onClick={() => selectMode('shortBreak')}
@@ -237,7 +239,7 @@ export default function PomodoroPage() {
                   : 'bg-gray-100 text-[#6E6A7C]'
               }`}
             >
-              Short Break
+              {t.pomodoro.shortBreak}
             </button>
             <button
               onClick={() => selectMode('longBreak')}
@@ -247,20 +249,20 @@ export default function PomodoroPage() {
                   : 'bg-gray-100 text-[#6E6A7C]'
               }`}
             >
-              Long Break
+              {t.pomodoro.longBreak}
             </button>
           </div>
 
           {/* Completed Pomodoros */}
           <div className="text-center">
-            <p className="text-sm text-[#6E6A7C] mb-2">Completed Pomodoros</p>
+            <p className="text-sm text-[#6E6A7C] mb-2">{t.pomodoro.completedPomodoros}</p>
             <p className="text-2xl font-semibold text-[#24252C]">{completedPomodoros}</p>
           </div>
         </div>
 
         {/* Time Blocks Visualization */}
         <div className="bg-white rounded-[15px] p-6 shadow-[0px_4px_32px_rgba(0,0,0,0.04)]">
-          <h3 className="text-lg font-semibold text-[#24252C] mb-4">Today's Sessions</h3>
+          <h3 className="text-lg font-semibold text-[#24252C] mb-4">{t.pomodoro.todaySessions}</h3>
           <div className="flex gap-2 flex-wrap">
             {Array.from({ length: 8 }).map((_, i) => (
               <div

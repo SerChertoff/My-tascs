@@ -13,10 +13,13 @@ import {
   TaskPriority,
   TaskStatus,
 } from '../../lib/tasks'
+import { toast } from '../../lib/toast'
+import { useTranslation } from '../../lib/useTranslation'
 import PageHeader from '../../components/PageHeader'
 import BottomNavigation from '../../components/BottomNavigation'
 
 export default function TasksPage() {
+  const { t } = useTranslation()
   const [user, setUser] = useState<{ email: string; name?: string } | null>(null)
   const [allTasks, setAllTasks] = useState<Task[]>([])
   const [filteredTasks, setFilteredTasks] = useState<Task[]>([])
@@ -94,9 +97,10 @@ export default function TasksPage() {
   }
 
   const handleDeleteTask = (id: string) => {
-    if (confirm('Вы уверены, что хотите удалить эту задачу?')) {
+    if (confirm(t.tasks.deleteConfirm)) {
       deleteTask(id)
       loadTasks()
+      toast.success(t.tasks.taskDeleted)
     }
   }
 
@@ -110,7 +114,7 @@ export default function TasksPage() {
   return (
     <div className="relative min-h-screen w-full bg-white pb-24">
       <PageHeader
-        title="All Tasks"
+        title={t.tasks.allTasks}
         rightAction={
           <a href={`${basePath}/new-task`} className="w-6 h-6 flex items-center justify-center hover:opacity-70 transition-opacity">
             <svg
@@ -136,7 +140,7 @@ export default function TasksPage() {
         <div className="relative">
           <input
             type="text"
-            placeholder="Search tasks..."
+            placeholder={t.tasks.tasks === 'Tasks' ? 'Search tasks...' : 'Поиск задач...'}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full h-[44px] pl-10 pr-4 border border-[#5F33E1] rounded-[15px] text-sm placeholder:text-[#24252C] placeholder:opacity-60 focus:outline-none focus:ring-2 focus:ring-[#5F33E1]"
@@ -221,13 +225,13 @@ export default function TasksPage() {
         {filteredTasks.length === 0 ? (
           <div className="bg-white rounded-[15px] p-8 shadow-[0px_4px_32px_rgba(0,0,0,0.04)] text-center">
             <p className="text-sm text-[#6E6A7C] mb-2">
-              {searchQuery ? 'Задачи не найдены' : 'Нет задач'}
+              {searchQuery ? (t.tasks.tasks === 'Tasks' ? 'No tasks found' : 'Задачи не найдены') : t.tasks.noTasks}
             </p>
             <a
               href={`${basePath}/new-task`}
               className="inline-block text-sm text-[#5F33E1] font-semibold"
             >
-              Создать задачу
+              {t.tasks.createTask}
             </a>
           </div>
         ) : (

@@ -2,8 +2,10 @@
 
 import { useState, useEffect } from 'react'
 import { useBasePath } from '../lib/useBasePath'
+import { useTranslation } from '../lib/useTranslation'
 
 export default function BottomNavigation() {
+  const { t } = useTranslation()
   const basePath = useBasePath()
   const [currentPath, setCurrentPath] = useState('')
 
@@ -36,7 +38,7 @@ export default function BottomNavigation() {
             </svg>
           </div>
           <span className={`text-[10px] ${isActive('/home') ? 'text-[#5F33E1]' : 'text-[#6E6A7C]'}`}>
-            Home
+            {t.common.save === 'Save' ? 'Home' : 'Главная'}
           </span>
         </a>
         <a
@@ -78,7 +80,7 @@ export default function BottomNavigation() {
             </svg>
           </div>
           <span className={`text-[10px] ${isActive('/calendar') ? 'text-[#5F33E1]' : 'text-[#6E6A7C]'}`}>
-            Calendar
+            {t.calendar.calendar}
           </span>
         </a>
         <a
@@ -117,7 +119,7 @@ export default function BottomNavigation() {
             </svg>
           </div>
           <span className={`text-[10px] ${isActive('/tasks') ? 'text-[#5F33E1]' : 'text-[#6E6A7C]'}`}>
-            Tasks
+            {t.tasks.tasks}
           </span>
         </a>
         <a
@@ -143,7 +145,7 @@ export default function BottomNavigation() {
             </svg>
           </div>
           <span className={`text-[10px] ${isActive('/profile') ? 'text-[#5F33E1]' : 'text-[#6E6A7C]'}`}>
-            Profile
+            {t.profile.profile}
           </span>
         </a>
       </div>

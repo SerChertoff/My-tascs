@@ -5,10 +5,12 @@ import { useBasePath } from '../../lib/useBasePath'
 import { getCurrentUser, logout, updateUser } from '../../lib/auth'
 import { getTaskStats } from '../../lib/tasks'
 import { toast } from '../../lib/toast'
+import { useTranslation } from '../../lib/useTranslation'
 import PageHeader from '../../components/PageHeader'
 import BottomNavigation from '../../components/BottomNavigation'
 
 export default function ProfilePage() {
+  const { t } = useTranslation()
   const [user, setUser] = useState<{ email: string; name?: string; avatarUrl?: string } | null>(null)
   const [stats, setStats] = useState(getTaskStats())
   const [name, setName] = useState('')
@@ -68,14 +70,14 @@ export default function ProfilePage() {
   const handlePhotoSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
-      if (!file.type.startsWith('image/')) {
-        toast.error('Пожалуйста, выберите изображение')
-        return
-      }
-      if (file.size > 5 * 1024 * 1024) {
-        toast.error('Размер файла не должен превышать 5 МБ')
-        return
-      }
+        if (!file.type.startsWith('image/')) {
+          toast.error(t.profile.photoError)
+          return
+        }
+        if (file.size > 5 * 1024 * 1024) {
+          toast.error(t.profile.photoSizeError)
+          return
+        }
       const reader = new FileReader()
       reader.onloadend = () => {
         const avatarUrl = reader.result as string
@@ -101,11 +103,11 @@ export default function ProfilePage() {
       const file = target.files?.[0]
       if (file) {
         if (!file.type.startsWith('image/')) {
-          toast.error('Пожалуйста, выберите изображение')
+          toast.error(t.profile.photoError)
           return
         }
         if (file.size > 5 * 1024 * 1024) {
-          toast.error('Размер файла не должен превышать 5 МБ')
+          toast.error(t.profile.photoSizeError)
           return
         }
         const reader = new FileReader()
@@ -114,10 +116,10 @@ export default function ProfilePage() {
           updateUser({ avatarUrl })
           setUser({ ...user!, avatarUrl })
           setShowPhotoOptions(false)
-          toast.success('Фото обновлено')
+          toast.success(t.profile.photoUpdated)
         }
         reader.onerror = () => {
-          toast.error('Ошибка при загрузке фото')
+          toast.error(t.profile.photoError)
         }
         reader.readAsDataURL(file)
       }
@@ -126,13 +128,13 @@ export default function ProfilePage() {
   }
 
   const handleRemovePhoto = () => {
-    if (confirm('Удалить фото профиля?')) {
+    if (confirm(t.profile.removePhotoConfirm)) {
       updateUser({ avatarUrl: '' })
       const updatedUser = { ...user! }
       delete updatedUser.avatarUrl
       setUser(updatedUser)
       setShowPhotoOptions(false)
-      toast.success('Фото удалено')
+      toast.success(t.profile.photoRemoved)
     }
   }
 
@@ -146,7 +148,7 @@ export default function ProfilePage() {
 
   return (
     <div className="relative min-h-screen w-full bg-white pb-24">
-      <PageHeader title="Profile" />
+      <PageHeader title={t.profile.profile} />
 
       {/* Profile Content */}
       <div className="px-6 py-6 space-y-6">
@@ -227,7 +229,7 @@ export default function ProfilePage() {
                         strokeLinejoin="round"
                       />
                     </svg>
-                    <span>Выбрать из галереи</span>
+                    <span>{t.profile.selectFromGallery}</span>
                   </div>
                 </label>
                 <button
@@ -254,7 +256,7 @@ export default function ProfilePage() {
                       strokeLinejoin="round"
                     />
                   </svg>
-                  <span>Сделать фото</span>
+                  <span>{t.profile.takePhoto}</span>
                 </button>
                 {user?.avatarUrl && (
                   <button
@@ -281,7 +283,7 @@ export default function ProfilePage() {
                         strokeLinejoin="round"
                       />
                     </svg>
-                    <span>Удалить фото</span>
+                    <span>{t.profile.removePhoto}</span>
                   </button>
                 )}
               </div>
@@ -293,7 +295,7 @@ export default function ProfilePage() {
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Enter name"
+                placeholder={t.auth.name}
                 className="flex-1 h-[40px] px-4 border border-[#5F33E1] rounded-[15px] text-sm text-center focus:outline-none focus:ring-2 focus:ring-[#5F33E1]"
                 autoFocus
               />
@@ -346,7 +348,7 @@ export default function ProfilePage() {
                 onClick={() => setIsEditing(true)}
                 className="text-sm text-[#5F33E1] font-semibold"
               >
-                Edit name
+                {t.profile.editName}
               </button>
             </div>
           )}
@@ -355,25 +357,25 @@ export default function ProfilePage() {
 
         {/* Statistics */}
         <div className="bg-white rounded-[15px] p-6 shadow-[0px_4px_32px_rgba(0,0,0,0.04)]">
-          <h3 className="text-lg font-semibold text-[#24252C] mb-4">Statistics</h3>
+          <h3 className="text-lg font-semibold text-[#24252C] mb-4">{t.profile.statistics}</h3>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-[#6E6A7C]">Total Tasks</span>
+              <span className="text-sm text-[#6E6A7C]">{t.profile.totalTasks}</span>
               <span className="text-lg font-semibold text-[#24252C]">{stats.total}</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-sm text-[#6E6A7C]">Completed</span>
+              <span className="text-sm text-[#6E6A7C]">{t.tasks.completed}</span>
               <span className="text-lg font-semibold text-[#5F33E1]">{stats.completed}</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-sm text-[#6E6A7C]">Pending</span>
+              <span className="text-sm text-[#6E6A7C]">{t.profile.pending}</span>
               <span className="text-lg font-semibold text-[#24252C]">
                 {stats.total - stats.completed}
               </span>
             </div>
             <div className="pt-4 border-t border-gray-100">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-[#6E6A7C]">Completion Rate</span>
+                <span className="text-sm text-[#6E6A7C]">{t.profile.completionRate}</span>
                 <span className="text-lg font-semibold text-[#5F33E1]">{completionRate}%</span>
               </div>
               <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
@@ -400,10 +402,26 @@ export default function ProfilePage() {
 
         {/* Settings */}
         <div className="bg-white rounded-[15px] p-6 shadow-[0px_4px_32px_rgba(0,0,0,0.04)]">
-          <h3 className="text-lg font-semibold text-[#24252C] mb-4">Settings</h3>
+          <h3 className="text-lg font-semibold text-[#24252C] mb-4">{t.profile.settings}</h3>
           <div className="space-y-4">
+            <a href={`${basePath}/notifications`} className="w-full flex items-center justify-between py-3">
+              <span className="text-sm text-[#24252C]">{t.profile.notifications}</span>
+              <svg
+                className="w-5 h-5 text-[#6E6A7C]"
+                viewBox="0 0 24 24"
+                fill="none"
+              >
+                <path
+                  d="M9 18l6-6-6-6"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </a>
             <button className="w-full flex items-center justify-between py-3">
-              <span className="text-sm text-[#24252C]">Notifications</span>
+              <span className="text-sm text-[#24252C]">{t.profile.theme}</span>
               <svg
                 className="w-5 h-5 text-[#6E6A7C]"
                 viewBox="0 0 24 24"
@@ -418,8 +436,8 @@ export default function ProfilePage() {
                 />
               </svg>
             </button>
-            <button className="w-full flex items-center justify-between py-3">
-              <span className="text-sm text-[#24252C]">Theme</span>
+            <a href={`${basePath}/settings`} className="w-full flex items-center justify-between py-3">
+              <span className="text-sm text-[#24252C]">{t.profile.language}</span>
               <svg
                 className="w-5 h-5 text-[#6E6A7C]"
                 viewBox="0 0 24 24"
@@ -433,23 +451,7 @@ export default function ProfilePage() {
                   strokeLinejoin="round"
                 />
               </svg>
-            </button>
-            <button className="w-full flex items-center justify-between py-3">
-              <span className="text-sm text-[#24252C]">Language</span>
-              <svg
-                className="w-5 h-5 text-[#6E6A7C]"
-                viewBox="0 0 24 24"
-                fill="none"
-              >
-                <path
-                  d="M9 18l6-6-6-6"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </button>
+            </a>
           </div>
         </div>
 

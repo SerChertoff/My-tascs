@@ -5,10 +5,12 @@ import { useBasePath } from '../../lib/useBasePath'
 import { getCurrentUser } from '../../lib/auth'
 import { addTask, updateTask, getTasks, TaskPriority, Task } from '../../lib/tasks'
 import { toast } from '../../lib/toast'
+import { useTranslation } from '../../lib/useTranslation'
 import PageHeader from '../../components/PageHeader'
 import BottomNavigation from '../../components/BottomNavigation'
 
 export default function NewTaskPage() {
+  const { t } = useTranslation()
   const [user, setUser] = useState<{ email: string; name?: string } | null>(null)
   const [isEdit, setIsEdit] = useState(false)
   const [taskId, setTaskId] = useState<string | null>(null)
@@ -67,20 +69,20 @@ export default function NewTaskPage() {
     setError('')
 
     if (!title.trim()) {
-      setError('Пожалуйста, введите название задачи')
-      toast.error('Пожалуйста, введите название задачи')
+      setError(t.tasks.enterTitle)
+      toast.error(t.tasks.enterTitle)
       return
     }
 
     if (!time.trim()) {
-      setError('Пожалуйста, введите время')
-      toast.error('Пожалуйста, введите время')
+      setError(t.tasks.enterTime)
+      toast.error(t.tasks.enterTime)
       return
     }
 
     if (!date.trim()) {
-      setError('Пожалуйста, выберите дату')
-      toast.error('Пожалуйста, выберите дату')
+      setError(t.tasks.selectDate)
+      toast.error(t.tasks.selectDate)
       return
     }
 
@@ -93,7 +95,7 @@ export default function NewTaskPage() {
           date: date.trim(),
           priority,
         })
-        toast.success('Задача обновлена!')
+        toast.success(t.tasks.taskUpdated)
       } else {
         addTask({
           title: title.trim(),
@@ -102,14 +104,14 @@ export default function NewTaskPage() {
           date: date.trim(),
           priority,
         })
-        toast.success('Задача создана!')
+        toast.success(t.tasks.taskCreated)
       }
       setTimeout(() => {
         window.location.href = `${basePath}/home`
       }, 500)
     } catch (err) {
-      setError('Произошла ошибка при сохранении задачи')
-      toast.error('Произошла ошибка при сохранении задачи')
+      setError(t.tasks.saveError)
+      toast.error(t.tasks.saveError)
     }
   }
 
@@ -118,14 +120,14 @@ export default function NewTaskPage() {
   }
 
   const priorityOptions: { value: TaskPriority; label: string; colors: { bg: string; text: string } }[] = [
-    { value: 'Low', label: 'Low', colors: { bg: 'bg-[#E3F2FF]', text: 'text-[#0087FF]' } },
-    { value: 'Medium', label: 'Medium', colors: { bg: 'bg-[#EDE8FF]', text: 'text-[#5F33E1]' } },
-    { value: 'High', label: 'High', colors: { bg: 'bg-[#FFE9E1]', text: 'text-[#FF7D53]' } },
+    { value: 'Low', label: t.tasks.low, colors: { bg: 'bg-[#E3F2FF]', text: 'text-[#0087FF]' } },
+    { value: 'Medium', label: t.tasks.medium, colors: { bg: 'bg-[#EDE8FF]', text: 'text-[#5F33E1]' } },
+    { value: 'High', label: t.tasks.high, colors: { bg: 'bg-[#FFE9E1]', text: 'text-[#FF7D53]' } },
   ]
 
   return (
     <div className="relative min-h-screen w-full bg-white">
-      <PageHeader title={isEdit ? 'Edit Task' : 'New Task'} />
+      <PageHeader title={isEdit ? t.tasks.editTask : t.tasks.newTask} />
 
       {/* Form */}
       <form onSubmit={handleSubmit} className="px-6 py-6 space-y-6">
@@ -138,13 +140,13 @@ export default function NewTaskPage() {
         {/* Title */}
         <div>
           <label className="block text-sm font-semibold text-[#24252C] mb-2">
-            Title
+            {t.tasks.title}
           </label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="Enter task title"
+            placeholder={t.tasks.title}
             className="w-full h-[52px] px-4 border border-[#5F33E1] rounded-[15px] text-sm placeholder:text-[#24252C] placeholder:opacity-60 focus:outline-none focus:ring-2 focus:ring-[#5F33E1]"
             required
           />
@@ -153,12 +155,12 @@ export default function NewTaskPage() {
         {/* Description */}
         <div>
           <label className="block text-sm font-semibold text-[#24252C] mb-2">
-            Description (Optional)
+            {t.tasks.description}
           </label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            placeholder="Enter task description"
+            placeholder={t.tasks.description}
             rows={4}
             className="w-full px-4 py-3 border border-[#5F33E1] rounded-[15px] text-sm placeholder:text-[#24252C] placeholder:opacity-60 focus:outline-none focus:ring-2 focus:ring-[#5F33E1] resize-none"
           />
@@ -180,7 +182,7 @@ export default function NewTaskPage() {
           </div>
           <div>
             <label className="block text-sm font-semibold text-[#24252C] mb-2">
-              Time
+              {t.tasks.time}
             </label>
             <input
               type="text"

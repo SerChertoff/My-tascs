@@ -3,10 +3,12 @@
 import { useState, useEffect } from 'react'
 import { useBasePath } from '../../lib/useBasePath'
 import { getCurrentUser } from '../../lib/auth'
+import { useTranslation } from '../../lib/useTranslation'
 import PageHeader from '../../components/PageHeader'
 import BottomNavigation from '../../components/BottomNavigation'
 
 export default function MenuPage() {
+  const { t } = useTranslation()
   const [user, setUser] = useState<{ email: string; name?: string; avatarUrl?: string } | null>(null)
   const basePath = useBasePath()
 
@@ -26,7 +28,7 @@ export default function MenuPage() {
   const menuItems = [
     {
       id: 'settings',
-      title: 'Settings',
+      title: t.settings.settings,
       icon: (
         <svg
           className="w-8 h-8"
@@ -53,7 +55,7 @@ export default function MenuPage() {
     },
     {
       id: 'tasks',
-      title: 'Tasks',
+      title: t.tasks.tasks,
       icon: (
         <svg
           className="w-8 h-8"
@@ -87,7 +89,7 @@ export default function MenuPage() {
     },
     {
       id: 'pomodoro',
-      title: 'Pomodoro',
+      title: t.pomodoro.pomodoro,
       icon: (
         <svg
           className="w-8 h-8"
@@ -113,7 +115,7 @@ export default function MenuPage() {
     },
     {
       id: 'time-blocking',
-      title: 'Time Blocking',
+      title: t.timeBlocking.timeBlocking,
       icon: (
         <svg
           className="w-8 h-8"
@@ -154,7 +156,7 @@ export default function MenuPage() {
 
   return (
     <div className="relative min-h-screen w-full bg-white pb-24">
-      <PageHeader title="Menu" />
+      <PageHeader title={t.menu.menu} />
 
       <div className="px-6 py-6">
         {/* Menu Grid */}

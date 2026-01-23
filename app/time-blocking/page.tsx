@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useBasePath } from '../../lib/useBasePath'
 import { getCurrentUser } from '../../lib/auth'
 import { getTasks, Task } from '../../lib/tasks'
+import { useTranslation } from '../../lib/useTranslation'
 import PageHeader from '../../components/PageHeader'
 import BottomNavigation from '../../components/BottomNavigation'
 
@@ -17,6 +18,7 @@ interface TimeBlock {
 }
 
 export default function TimeBlockingPage() {
+  const { t } = useTranslation()
   const [user, setUser] = useState<{ email: string; name?: string; avatarUrl?: string } | null>(null)
   const [tasks, setTasks] = useState<Task[]>([])
   const [timeBlocks, setTimeBlocks] = useState<TimeBlock[]>([])
@@ -83,7 +85,7 @@ export default function TimeBlockingPage() {
           id: `empty-${hour}`,
           startTime: timeStr,
           endTime: `${((hour + 1) % 24).toString().padStart(2, '0')}:00`,
-          title: 'Free Time',
+          title: t.timeBlocking.freeTime,
           color: '#F5F5F5',
         })
       }
@@ -114,7 +116,7 @@ export default function TimeBlockingPage() {
 
   return (
     <div className="relative min-h-screen w-full bg-white pb-24">
-      <PageHeader title="Time Blocking" />
+      <PageHeader title={t.timeBlocking.timeBlocking} />
 
       <div className="px-6 py-6 space-y-6">
         {/* Date Selector */}
@@ -137,7 +139,7 @@ export default function TimeBlockingPage() {
             }}
             className="px-4 py-2 bg-[#5F33E1] text-white rounded-[15px] text-sm font-semibold"
           >
-            Next Day
+            {t.common.next}
           </button>
         </div>
 
@@ -191,7 +193,7 @@ export default function TimeBlockingPage() {
                         href={`${basePath}/new-task?id=${block.taskId}`}
                         className="text-[#5F33E1] text-xs font-semibold"
                       >
-                        Edit
+                        {t.common.edit}
                       </a>
                     )}
                   </div>
@@ -219,29 +221,29 @@ export default function TimeBlockingPage() {
               strokeLinejoin="round"
             />
           </svg>
-          Add Time Block
+          {t.timeBlocking.addTimeBlock}
         </button>
 
         {/* Statistics */}
         <div className="bg-white rounded-[15px] p-6 shadow-[0px_4px_32px_rgba(0,0,0,0.04)]">
-          <h3 className="text-lg font-semibold text-[#24252C] mb-4">Day Summary</h3>
+          <h3 className="text-lg font-semibold text-[#24252C] mb-4">{t.timeBlocking.daySummary}</h3>
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-[#6E6A7C]">Scheduled Tasks</span>
+              <span className="text-sm text-[#6E6A7C]">{t.timeBlocking.scheduledTasks}</span>
               <span className="text-lg font-semibold text-[#24252C]">
                 {tasks.length}
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-sm text-[#6E6A7C]">Time Blocks</span>
+              <span className="text-sm text-[#6E6A7C]">{t.timeBlocking.timeBlocks}</span>
               <span className="text-lg font-semibold text-[#5F33E1]">
                 {timeBlocks.filter(b => b.taskId).length}
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-sm text-[#6E6A7C]">Free Time</span>
+              <span className="text-sm text-[#6E6A7C]">{t.timeBlocking.freeTime}</span>
               <span className="text-lg font-semibold text-[#24252C]">
-                {timeBlocks.filter(b => !b.taskId).length} blocks
+                {timeBlocks.filter(b => !b.taskId).length} {t.timeBlocking.blocks}
               </span>
             </div>
           </div>

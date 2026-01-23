@@ -14,9 +14,11 @@ import {
   formatTime,
 } from '../lib/tasks'
 import { toast } from '../lib/toast'
+import { useTranslation } from '../lib/useTranslation'
 import BottomNavigation from './BottomNavigation'
 
 export default function Home() {
+  const { t } = useTranslation()
   const [user, setUser] = useState<{ email: string; name?: string; avatarUrl?: string } | null>(null)
   const [tasks, setTasks] = useState<Task[]>([])
   const [stats, setStats] = useState(getTaskStats())
@@ -64,18 +66,18 @@ export default function Home() {
     loadTasks()
     if (task) {
       if (task.status === 'pending') {
-        toast.success('Задача выполнена!')
+        toast.success(t.tasks.taskCompleted)
       } else {
-        toast.info('Задача возвращена в список')
+        toast.info(t.tasks.taskReturned)
       }
     }
   }
 
   const handleDeleteTask = (id: string) => {
-    if (confirm('Вы уверены, что хотите удалить эту задачу?')) {
+    if (confirm(t.tasks.deleteConfirm)) {
       deleteTask(id)
       loadTasks()
-      toast.success('Задача удалена')
+      toast.success(t.tasks.taskDeleted)
     }
   }
 
@@ -98,7 +100,7 @@ export default function Home() {
             />
           </div>
           <div>
-            <p className="text-sm text-[#24252C]">Hello!</p>
+            <p className="text-sm text-[#24252C]">{t.home.hello}</p>
             <p className="text-lg font-semibold text-[#24252C]">{user.name || user.email}</p>
           </div>
         </div>
@@ -167,10 +169,10 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Today's Tasks Section */}
-      <div className="px-6 mb-6">
-        <div className="flex items-center gap-2 mb-4">
-          <h2 className="text-lg font-semibold text-[#24252C]">Today&apos;s Tasks</h2>
+        {/* Today's Tasks Section */}
+        <div className="px-6 mb-6">
+          <div className="flex items-center gap-2 mb-4">
+            <h2 className="text-lg font-semibold text-[#24252C]">{t.tasks.todayTasks}</h2>
           <div className="w-4 h-4 bg-[#EEE9FF] rounded-full flex items-center justify-center">
             <span className="text-[11px] text-[#5F33E1] font-semibold">
               {tasks.filter(t => t.status === 'pending').length}
@@ -181,16 +183,16 @@ export default function Home() {
         {/* Statistics Cards */}
         <div className="grid grid-cols-2 gap-4 mb-6">
           <div className="bg-white rounded-[15px] p-4 shadow-[0px_4px_32px_rgba(0,0,0,0.04)]">
-            <p className="text-sm text-[#24252C] mb-2">Total</p>
+            <p className="text-sm text-[#24252C] mb-2">{t.home.total}</p>
             <p className="text-[64px] font-semibold text-[#24252C] leading-none">{stats.total}</p>
-            {stats.total > 0 && (
-              <p className="text-xs text-[#6E6A7C] mt-2">
-                {stats.completed} completed
-              </p>
-            )}
+              {stats.total > 0 && (
+                <p className="text-xs text-[#6E6A7C] mt-2">
+                  {stats.completed} {t.tasks.completed.toLowerCase()}
+                </p>
+              )}
           </div>
           <div className="bg-[#5F33E1] rounded-[15px] p-4 shadow-[0px_4px_32px_rgba(0,0,0,0.04)]">
-            <p className="text-sm text-white mb-2">Completed tasks</p>
+            <p className="text-sm text-white mb-2">{t.home.completedTasks}</p>
             <p className="text-[64px] font-semibold text-white leading-none">{stats.completed}</p>
             {stats.total > 0 && (
               <div className="mt-2">
@@ -204,16 +206,16 @@ export default function Home() {
             )}
           </div>
           <div className="bg-[#5F33E1] rounded-[15px] p-4 shadow-[0px_4px_32px_rgba(0,0,0,0.04)]">
-            <p className="text-sm text-white mb-2">Today tasks</p>
+            <p className="text-sm text-white mb-2">{t.home.todayTasks}</p>
             <p className="text-[64px] font-semibold text-white leading-none">{stats.today}</p>
             {stats.today > 0 && (
               <p className="text-xs text-white/80 mt-2">
-                {stats.todayCompleted} completed
+                {stats.todayCompleted} {t.tasks.completed.toLowerCase()}
               </p>
             )}
           </div>
           <div className="bg-white rounded-[15px] p-4 shadow-[0px_4px_32px_rgba(0,0,0,0.04)]">
-            <p className="text-sm text-[#24252C] mb-2">Week tasks</p>
+            <p className="text-sm text-[#24252C] mb-2">{t.home.weekTasks}</p>
             <p className="text-[64px] font-semibold text-[#24252C] leading-none">{stats.week}</p>
             {stats.week > 0 && (
               <p className="text-xs text-[#6E6A7C] mt-2">
@@ -269,18 +271,18 @@ export default function Home() {
         </div>
 
         {/* Statistics Title */}
-        <h3 className="text-lg font-semibold text-[#24252C] mb-4">Statistics</h3>
+        <h3 className="text-lg font-semibold text-[#24252C] mb-4">{t.home.statistics}</h3>
 
         {/* Task Cards */}
         <div className="space-y-4 mb-6">
           {tasks.length === 0 ? (
             <div className="bg-white rounded-[15px] p-8 shadow-[0px_4px_32px_rgba(0,0,0,0.04)] text-center">
-              <p className="text-sm text-[#6E6A7C]">Нет задач на сегодня</p>
+              <p className="text-sm text-[#6E6A7C]">{t.tasks.noTasksToday}</p>
               <a
                 href={`${basePath}/new-task`}
                 className="mt-4 inline-block text-sm text-[#5F33E1] font-semibold"
               >
-                Создать задачу
+                {t.tasks.createTask}
               </a>
             </div>
           ) : (
