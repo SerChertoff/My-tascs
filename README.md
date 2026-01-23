@@ -1,4 +1,4 @@
-# My-tascs
+
 
 # Task Sync
 
@@ -11,25 +11,10 @@
 - TypeScript
 - Tailwind CSS
 
-## Установка
 
-```bash
-npm install
-```
 
-## Запуск локально
 
-```bash
-npm run dev
-```
 
-Приложение будет доступно по адресу [http://localhost:3000](http://localhost:3000)
-
-## Деплой
-
-Приложение автоматически деплоится на GitHub Pages через GitHub Actions при каждом push в ветку `main`.
-
-**Доступно по адресу:** https://serchertoff.github.io/My-tascs/
 
 ## Структура проекта
 
