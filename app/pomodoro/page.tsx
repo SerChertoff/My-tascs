@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useBasePath } from '../../lib/useBasePath'
 import { getCurrentUser } from '../../lib/auth'
+import { getPomodoroSettings } from '../../lib/pomodoroSettings'
 import PageHeader from '../../components/PageHeader'
 import BottomNavigation from '../../components/BottomNavigation'
 
@@ -10,7 +11,8 @@ type TimerMode = 'work' | 'shortBreak' | 'longBreak'
 
 export default function PomodoroPage() {
   const [user, setUser] = useState<{ email: string; name?: string; avatarUrl?: string } | null>(null)
-  const [timeLeft, setTimeLeft] = useState(25 * 60) // 25 минут в секундах
+  const [settings, setSettings] = useState(getPomodoroSettings())
+  const [timeLeft, setTimeLeft] = useState(settings.workInterval * 60)
   const [isRunning, setIsRunning] = useState(false)
   const [mode, setMode] = useState<TimerMode>('work')
   const [completedPomodoros, setCompletedPomodoros] = useState(0)
@@ -23,6 +25,9 @@ export default function PomodoroPage() {
       window.location.href = `${basePath}/login`
     } else {
       setUser(currentUser)
+      const currentSettings = getPomodoroSettings()
+      setSettings(currentSettings)
+      setTimeLeft(currentSettings.workInterval * 60)
     }
   }, [basePath])
 
@@ -55,18 +60,18 @@ export default function PomodoroPage() {
     if (mode === 'work') {
       const newCompleted = completedPomodoros + 1
       setCompletedPomodoros(newCompleted)
-      // После 4 помодоро - длинный перерыв, иначе короткий
-      if (newCompleted % 4 === 0) {
+      // После заданного количества помодоро - длинный перерыв, иначе короткий
+      if (newCompleted % settings.intervalCount === 0) {
         setMode('longBreak')
-        setTimeLeft(15 * 60) // 15 минут
+        setTimeLeft(settings.breakInterval * 2 * 60) // Длинный перерыв = 2x обычного
       } else {
         setMode('shortBreak')
-        setTimeLeft(5 * 60) // 5 минут
+        setTimeLeft(settings.breakInterval * 60)
       }
     } else {
       // После перерыва возвращаемся к работе
       setMode('work')
-      setTimeLeft(25 * 60)
+      setTimeLeft(settings.workInterval * 60)
     }
   }
 
@@ -77,11 +82,11 @@ export default function PomodoroPage() {
   const resetTimer = () => {
     setIsRunning(false)
     if (mode === 'work') {
-      setTimeLeft(25 * 60)
+      setTimeLeft(settings.workInterval * 60)
     } else if (mode === 'shortBreak') {
-      setTimeLeft(5 * 60)
+      setTimeLeft(settings.breakInterval * 60)
     } else {
-      setTimeLeft(15 * 60)
+      setTimeLeft(settings.breakInterval * 2 * 60)
     }
   }
 
@@ -89,11 +94,11 @@ export default function PomodoroPage() {
     setIsRunning(false)
     setMode(newMode)
     if (newMode === 'work') {
-      setTimeLeft(25 * 60)
+      setTimeLeft(settings.workInterval * 60)
     } else if (newMode === 'shortBreak') {
-      setTimeLeft(5 * 60)
+      setTimeLeft(settings.breakInterval * 60)
     } else {
-      setTimeLeft(15 * 60)
+      setTimeLeft(settings.breakInterval * 2 * 60)
     }
   }
 
@@ -104,7 +109,11 @@ export default function PomodoroPage() {
   }
 
   const progress = () => {
-    const total = mode === 'work' ? 25 * 60 : mode === 'shortBreak' ? 5 * 60 : 15 * 60
+    const total = mode === 'work' 
+      ? settings.workInterval * 60 
+      : mode === 'shortBreak' 
+      ? settings.breakInterval * 60 
+      : settings.breakInterval * 2 * 60
     return ((total - timeLeft) / total) * 100
   }
 

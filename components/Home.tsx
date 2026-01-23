@@ -94,6 +94,24 @@ export default function Home() {
         </div>
         <div className="flex items-center gap-4">
           <a
+            href={`${basePath}/menu`}
+            className="cursor-pointer hover:opacity-70 transition-opacity"
+          >
+            <svg
+              className="w-6 h-6 text-[#24252C]"
+              viewBox="0 0 24 24"
+              fill="none"
+            >
+              <path
+                d="M3 12H21M3 6H21M3 18H21"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </a>
+          <a
             href={`${basePath}/notifications`}
             className="relative cursor-pointer hover:opacity-70 transition-opacity"
           >
