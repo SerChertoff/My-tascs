@@ -206,7 +206,7 @@ export default function TimeBlockingPage() {
         {/* Add Block Button */}
         <button
           onClick={() => window.location.href = `${basePath}/new-task?date=${selectedDate}`}
-          className="w-full h-[52px] bg-[#5F33E1] rounded-[14px] text-white font-semibold text-lg flex items-center justify-center gap-2"
+          className="w-full h-[52px] bg-[#5F33E1] rounded-[15px] text-white font-semibold text-lg flex items-center justify-center gap-2"
         >
           <svg
             className="w-6 h-6"

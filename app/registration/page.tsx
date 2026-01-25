@@ -109,7 +109,7 @@ export default function RegistrationPage() {
               placeholder={t.auth.email}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full h-[30px] px-4 py-2 border border-[#5F33E1] rounded-[15px] text-sm placeholder:text-[#24252C] placeholder:opacity-60 focus:outline-none focus:ring-2 focus:ring-[#5F33E1]"
+              className="w-full h-[52px] px-4 border border-[#5F33E1] rounded-[15px] text-sm placeholder:text-[#24252C] placeholder:opacity-60 focus:outline-none focus:ring-2 focus:ring-[#5F33E1]"
               required
             />
           </div>
@@ -119,7 +119,7 @@ export default function RegistrationPage() {
               placeholder={t.auth.password}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full h-[30px] px-4 py-2 pr-12 border border-[#5F33E1] rounded-[15px] text-sm placeholder:text-[#24252C] placeholder:opacity-60 focus:outline-none focus:ring-2 focus:ring-[#5F33E1]"
+              className="w-full h-[52px] px-4 pr-12 border border-[#5F33E1] rounded-[15px] text-sm placeholder:text-[#24252C] placeholder:opacity-60 focus:outline-none focus:ring-2 focus:ring-[#5F33E1]"
               required
               minLength={6}
             />
@@ -169,7 +169,7 @@ export default function RegistrationPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-[331px] h-[52px] bg-[#5F33E1] rounded-[14px] text-white font-semibold text-lg flex items-center justify-center relative mb-4 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full h-[52px] bg-[#5F33E1] rounded-[15px] text-white font-semibold text-lg flex items-center justify-center relative mb-4 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? t.common.loading : t.auth.enter}
             <svg

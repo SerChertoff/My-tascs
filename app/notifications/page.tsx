@@ -149,7 +149,7 @@ export default function NotificationsPage() {
                               strokeLinecap="round"
                             />
                           </svg>
-                          <span className="text-[11px] text-[#AB94FF]">
+                          <span className="text-xs text-[#AB94FF]">
                             {formatTime(task.time)}
                           </span>
                         </div>
@@ -175,7 +175,7 @@ export default function NotificationsPage() {
                               strokeLinecap="round"
                             />
                           </svg>
-                          <span className="text-[11px] text-[#AB94FF]">
+                          <span className="text-xs text-[#AB94FF]">
                             {isToday
                               ? 'Сегодня'
                               : taskDate.toLocaleDateString('ru-RU', {
@@ -185,7 +185,7 @@ export default function NotificationsPage() {
                           </span>
                         </div>
                         <div className={`${priorityColors.bg} px-2 py-0.5 rounded-[7px]`}>
-                          <span className={`text-[9px] ${priorityColors.text} font-semibold`}>
+                          <span className={`text-[10px] ${priorityColors.text} font-semibold`}>
                             {task.priority}
                           </span>
                         </div>

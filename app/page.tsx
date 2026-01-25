@@ -100,7 +100,7 @@ export default function Page() {
         </p>
         <a
           href={`${basePath}/login`}
-          className="w-[331px] h-[52px] bg-[#5F33E1] rounded-[14px] text-white font-semibold text-lg flex items-center justify-center relative"
+          className="w-full max-w-[331px] h-[52px] bg-[#5F33E1] rounded-[15px] text-white font-semibold text-lg flex items-center justify-center relative"
           suppressHydrationWarning
         >
           {isClient ? t.start.letsStart : "Let's Start"}

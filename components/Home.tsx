@@ -174,7 +174,7 @@ export default function Home() {
           <div className="flex items-center gap-2 mb-4">
             <h2 className="text-lg font-semibold text-[#24252C]" suppressHydrationWarning>{isClient ? t.tasks.todayTasks : "Today's Tasks"}</h2>
           <div className="w-4 h-4 bg-[#EEE9FF] rounded-full flex items-center justify-center">
-            <span className="text-[11px] text-[#5F33E1] font-semibold">
+            <span className="text-xs text-[#5F33E1] font-semibold">
               {tasks.filter(t => t.status === 'pending').length}
             </span>
           </div>
@@ -377,7 +377,7 @@ function TaskCard({ task, basePath, onToggle, onDelete, priorityColors }: TaskCa
               {task.title}
             </h4>
             {task.description && (
-              <p className="text-[11px] text-[#6E6A7C] mb-2 line-clamp-2">
+              <p className="text-xs text-[#6E6A7C] mb-2 line-clamp-2">
                 {task.description}
               </p>
             )}
@@ -401,7 +401,7 @@ function TaskCard({ task, basePath, onToggle, onDelete, priorityColors }: TaskCa
                   strokeLinecap="round"
                 />
               </svg>
-              <span className="text-[11px] text-[#AB94FF]">
+              <span className="text-xs text-[#AB94FF]">
                 {formatTime(task.time)}
               </span>
             </div>
@@ -409,7 +409,7 @@ function TaskCard({ task, basePath, onToggle, onDelete, priorityColors }: TaskCa
         </div>
         <div className="flex items-start gap-2 flex-shrink-0">
           <div className={`${priorityColors.bg} px-2 py-1 rounded-[7px]`}>
-            <span className={`text-[9px] ${priorityColors.text} font-semibold`}>
+            <span className={`text-[10px] ${priorityColors.text} font-semibold`}>
               {task.priority}
             </span>
           </div>

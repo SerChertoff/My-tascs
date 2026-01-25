@@ -244,7 +244,7 @@ export default function NewTaskPage() {
         {/* Submit Button */}
         <button
           type="submit"
-          className="w-full h-[52px] bg-[#5F33E1] rounded-[14px] text-white font-semibold text-lg flex items-center justify-center relative mt-8"
+          className="w-full h-[52px] bg-[#5F33E1] rounded-[15px] text-white font-semibold text-lg flex items-center justify-center relative mt-8"
         >
           {isEdit ? t.tasks.updateTask : t.tasks.createTask}
           <svg

@@ -458,7 +458,7 @@ export default function ProfilePage() {
         {/* Logout Button */}
         <button
           onClick={handleLogout}
-          className="w-full h-[52px] bg-red-50 border-2 border-red-200 rounded-[14px] text-red-600 font-semibold text-lg flex items-center justify-center"
+          className="w-full h-[52px] bg-red-50 border-2 border-red-200 rounded-[15px] text-red-600 font-semibold text-lg flex items-center justify-center"
         >
           {t.profile.logout}
         </button>

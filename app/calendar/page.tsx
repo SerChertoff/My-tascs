@@ -253,7 +253,7 @@ export default function CalendarPage() {
                           {task.title}
                         </h4>
                         {task.description && (
-                          <p className="text-[11px] text-[#6E6A7C] mb-2 line-clamp-2">
+                          <p className="text-xs text-[#6E6A7C] mb-2 line-clamp-2">
                             {task.description}
                           </p>
                         )}
@@ -277,13 +277,13 @@ export default function CalendarPage() {
                               strokeLinecap="round"
                             />
                           </svg>
-                          <span className="text-[11px] text-[#AB94FF]">
+                          <span className="text-xs text-[#AB94FF]">
                             {formatTime(task.time)}
                           </span>
                         </div>
                       </div>
                       <div className={`${priorityColors.bg} px-2 py-1 rounded-[7px] ml-2`}>
-                        <span className={`text-[9px] ${priorityColors.text} font-semibold`}>
+                        <span className={`text-[10px] ${priorityColors.text} font-semibold`}>
                           {task.priority}
                         </span>
                       </div>

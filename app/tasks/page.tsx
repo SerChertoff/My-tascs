@@ -212,7 +212,7 @@ export default function TasksPage() {
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as 'date' | 'priority' | 'title')}
-            className="flex-1 h-[36px] px-3 border border-[#5F33E1] rounded-[15px] text-sm focus:outline-none focus:ring-2 focus:ring-[#5F33E1]"
+            className="flex-1 h-[40px] px-3 border border-[#5F33E1] rounded-[15px] text-sm focus:outline-none focus:ring-2 focus:ring-[#5F33E1]"
           >
             <option value="date">{t.tasks.date}</option>
             <option value="priority">{t.tasks.priority}</option>
@@ -289,7 +289,7 @@ export default function TasksPage() {
                         {task.title}
                       </h4>
                       {task.description && (
-                        <p className="text-[11px] text-[#6E6A7C] mb-2 line-clamp-2">
+                        <p className="text-xs text-[#6E6A7C] mb-2 line-clamp-2">
                           {task.description}
                         </p>
                       )}
@@ -314,7 +314,7 @@ export default function TasksPage() {
                               strokeLinecap="round"
                             />
                           </svg>
-                          <span className="text-[11px] text-[#AB94FF]">
+                          <span className="text-xs text-[#AB94FF]">
                             {formatTime(task.time)}
                           </span>
                         </div>
@@ -340,7 +340,7 @@ export default function TasksPage() {
                               strokeLinecap="round"
                             />
                           </svg>
-                          <span className={`text-[11px] ${
+                          <span className={`text-xs ${
                             isPast && task.status === 'pending'
                               ? 'text-red-500'
                               : isToday
@@ -356,7 +356,7 @@ export default function TasksPage() {
                           </span>
                         </div>
                         <div className={`${priorityColors.bg} px-2 py-0.5 rounded-[7px]`}>
-                          <span className={`text-[9px] ${priorityColors.text} font-semibold`}>
+                          <span className={`text-[10px] ${priorityColors.text} font-semibold`}>
                             {task.priority === 'High' ? t.tasks.high : task.priority === 'Medium' ? t.tasks.medium : t.tasks.low}
                           </span>
                         </div>
