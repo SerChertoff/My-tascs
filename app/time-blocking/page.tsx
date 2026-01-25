@@ -5,6 +5,7 @@ import { useBasePath } from '../../lib/useBasePath'
 import { getCurrentUser } from '../../lib/auth'
 import { getTasks, Task } from '../../lib/tasks'
 import { useTranslation } from '../../lib/useTranslation'
+import Link from 'next/link'
 import PageHeader from '../../components/PageHeader'
 import BottomNavigation from '../../components/BottomNavigation'
 
@@ -189,12 +190,12 @@ export default function TimeBlockingPage() {
                       )}
                     </div>
                     {isTask && (
-                      <a
-                        href={`${basePath}/new-task?id=${block.taskId}`}
+                      <Link
+                        href={`/new-task?id=${block.taskId}`}
                         className="text-[#5F33E1] text-xs font-semibold"
                       >
                         {t.common.edit}
-                      </a>
+                      </Link>
                     )}
                   </div>
                 </div>

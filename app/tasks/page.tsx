@@ -15,11 +15,14 @@ import {
 } from '../../lib/tasks'
 import { toast } from '../../lib/toast'
 import { useTranslation } from '../../lib/useTranslation'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import PageHeader from '../../components/PageHeader'
 import BottomNavigation from '../../components/BottomNavigation'
 
 export default function TasksPage() {
   const { t, language } = useTranslation()
+  const router = useRouter()
   const [user, setUser] = useState<{ email: string; name?: string } | null>(null)
   const [allTasks, setAllTasks] = useState<Task[]>([])
   const [filteredTasks, setFilteredTasks] = useState<Task[]>([])
@@ -116,7 +119,7 @@ export default function TasksPage() {
       <PageHeader
         title={t.tasks.allTasks}
         rightAction={
-          <a href={`${basePath}/new-task`} className="w-6 h-6 flex items-center justify-center hover:opacity-70 transition-opacity">
+          <Link href="/new-task" className="w-6 h-6 flex items-center justify-center hover:opacity-70 transition-opacity">
             <svg
               className="w-6 h-6 text-[#5F33E1]"
               viewBox="0 0 24 24"
@@ -130,7 +133,7 @@ export default function TasksPage() {
                 strokeLinejoin="round"
               />
             </svg>
-          </a>
+          </Link>
         }
       />
 
@@ -228,12 +231,12 @@ export default function TasksPage() {
             <p className="text-sm text-[#6E6A7C] mb-2">
               {searchQuery ? t.tasks.noTasksFound : t.tasks.noTasks}
             </p>
-            <a
-              href={`${basePath}/new-task`}
+            <Link
+              href="/new-task"
               className="inline-block text-sm text-[#5F33E1] font-semibold"
             >
               {t.tasks.createTask}
-            </a>
+            </Link>
           </div>
         ) : (
           <div className="space-y-4">
@@ -277,9 +280,7 @@ export default function TasksPage() {
                     </button>
                     <div
                       className="flex-1 min-w-0 cursor-pointer"
-                      onClick={() => {
-                        window.location.href = `${basePath}/new-task?id=${task.id}`
-                      }}
+                      onClick={() => router.push(`/new-task?id=${task.id}`)}
                     >
                       <h4
                         className={`text-sm text-[#24252C] mb-2 ${

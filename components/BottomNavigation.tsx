@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { useBasePath } from '../lib/useBasePath'
 import { useTranslation } from '../lib/useTranslation'
@@ -22,8 +23,8 @@ export default function BottomNavigation() {
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 shadow-[0px_-4px_32px_rgba(0,0,0,0.04)] z-50">
       <div className="flex items-center justify-around px-4 py-3">
-        <a
-          href={`${basePath}/home`}
+        <Link
+          href="/home"
           className="flex flex-col items-center transition-opacity hover:opacity-70"
         >
           <div className="w-6 h-6 mb-1">
@@ -40,9 +41,9 @@ export default function BottomNavigation() {
           <span className={`text-[10px] ${isActive('/home') ? 'text-[#5F33E1]' : 'text-[#6E6A7C]'}`}>
             {t.common.home}
           </span>
-        </a>
-        <a
-          href={`${basePath}/calendar`}
+        </Link>
+        <Link
+          href="/calendar"
           className="flex flex-col items-center transition-opacity hover:opacity-70"
         >
           <div className="w-6 h-6 mb-1">
@@ -82,9 +83,9 @@ export default function BottomNavigation() {
           <span className={`text-[10px] ${isActive('/calendar') ? 'text-[#5F33E1]' : 'text-[#6E6A7C]'}`}>
             {t.calendar.calendar}
           </span>
-        </a>
-        <a
-          href={`${basePath}/new-task`}
+        </Link>
+        <Link
+          href="/new-task"
           className="flex flex-col items-center transition-transform hover:scale-110"
         >
           <div className="w-11 h-11 bg-[#5F33E1] rounded-full flex items-center justify-center shadow-[2px_10px_18px_rgba(95,51,225,0.49)]">
@@ -102,9 +103,9 @@ export default function BottomNavigation() {
               />
             </svg>
           </div>
-        </a>
-        <a
-          href={`${basePath}/tasks`}
+        </Link>
+        <Link
+          href="/tasks"
           className="flex flex-col items-center transition-opacity hover:opacity-70"
         >
           <div className="w-6 h-6 mb-1">
@@ -121,9 +122,9 @@ export default function BottomNavigation() {
           <span className={`text-[10px] ${isActive('/tasks') ? 'text-[#5F33E1]' : 'text-[#6E6A7C]'}`}>
             {t.tasks.tasks}
           </span>
-        </a>
-        <a
-          href={`${basePath}/profile`}
+        </Link>
+        <Link
+          href="/profile"
           className="flex flex-col items-center transition-opacity hover:opacity-70"
         >
           <div className="w-6 h-6 mb-1">
@@ -147,7 +148,7 @@ export default function BottomNavigation() {
           <span className={`text-[10px] ${isActive('/profile') ? 'text-[#5F33E1]' : 'text-[#6E6A7C]'}`}>
             {t.profile.profile}
           </span>
-        </a>
+        </Link>
       </div>
     </div>
   )

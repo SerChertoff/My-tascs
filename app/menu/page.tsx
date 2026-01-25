@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useBasePath } from '../../lib/useBasePath'
 import { getCurrentUser } from '../../lib/auth'
 import { useTranslation } from '../../lib/useTranslation'
+import Link from 'next/link'
 import PageHeader from '../../components/PageHeader'
 import BottomNavigation from '../../components/BottomNavigation'
 
@@ -162,9 +163,9 @@ export default function MenuPage() {
         {/* Menu Grid */}
         <div className="grid grid-cols-2 gap-4">
           {menuItems.map((item) => (
-            <a
+            <Link
               key={item.id}
-              href={`${basePath}${item.href}`}
+              href={item.href}
               className="bg-white rounded-[15px] p-6 shadow-[0px_4px_32px_rgba(0,0,0,0.04)] flex flex-col items-center justify-center hover:shadow-[0px_8px_40px_rgba(0,0,0,0.08)] transition-shadow"
             >
               <div className="text-[#6E6A7C] mb-3">
@@ -173,7 +174,7 @@ export default function MenuPage() {
               <span className="text-sm font-semibold text-[#24252C]">
                 {item.title}
               </span>
-            </a>
+            </Link>
           ))}
         </div>
       </div>

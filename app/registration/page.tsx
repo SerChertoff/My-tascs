@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useState } from 'react'
 import { useBasePath } from '../../lib/useBasePath'
 import { register, login } from '../../lib/auth'
@@ -77,7 +78,7 @@ export default function RegistrationPage() {
 
       {/* Основной контент */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6">
-        <a href={`${basePath}/login`} className="absolute top-8 left-6">
+        <Link href="/login" className="absolute top-8 left-6">
           <svg
             className="w-6 h-6 text-[#24252C]"
             viewBox="0 0 24 24"
@@ -91,7 +92,7 @@ export default function RegistrationPage() {
               strokeLinejoin="round"
             />
           </svg>
-        </a>
+        </Link>
 
         <h1 className="text-2xl font-semibold text-[#24252C] mb-8 text-center" suppressHydrationWarning>
           {isClient ? t.auth.registration : 'Registration'}
@@ -188,9 +189,9 @@ export default function RegistrationPage() {
           </button>
         </form>
 
-        <a href={`${basePath}/login`} className="text-sm text-[#5F33E1]">
+        <Link href="/login" className="text-sm text-[#5F33E1]">
           {t.auth.login}
-        </a>
+        </Link>
       </div>
     </div>
   )

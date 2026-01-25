@@ -5,6 +5,7 @@ import { useBasePath } from '../../lib/useBasePath'
 import { getCurrentUser } from '../../lib/auth'
 import { getTasks, Task, formatTime, getPriorityColors } from '../../lib/tasks'
 import { useTranslation } from '../../lib/useTranslation'
+import Link from 'next/link'
 import PageHeader from '../../components/PageHeader'
 import BottomNavigation from '../../components/BottomNavigation'
 
@@ -104,7 +105,7 @@ export default function CalendarPage() {
       <PageHeader
         title={t.calendar.calendar}
         rightAction={
-          <a href={`${basePath}/new-task`} className="w-6 h-6 flex items-center justify-center hover:opacity-70 transition-opacity">
+          <Link href="/new-task" className="w-6 h-6 flex items-center justify-center hover:opacity-70 transition-opacity">
             <svg
               className="w-6 h-6 text-[#5F33E1]"
               viewBox="0 0 24 24"
@@ -226,12 +227,12 @@ export default function CalendarPage() {
           {selectedDateTasks.length === 0 ? (
             <div className="bg-white rounded-[15px] p-8 shadow-[0px_4px_32px_rgba(0,0,0,0.04)] text-center">
               <p className="text-sm text-[#6E6A7C]">{t.calendar.noTasksOnDate}</p>
-              <a
-                href={`${basePath}/new-task`}
+              <Link
+                href="/new-task"
                 className="mt-4 inline-block text-sm text-[#5F33E1] font-semibold"
               >
-                Создать задачу
-              </a>
+                {t.tasks.createTask}
+              </Link>
             </div>
           ) : (
             <div className="space-y-4">

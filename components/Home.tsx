@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { useBasePath } from '../lib/useBasePath'
 import { getCurrentUser, logout } from '../lib/auth'
@@ -105,8 +106,8 @@ export default function Home() {
           </div>
         </div>
         <div className="flex items-center gap-4">
-          <a
-            href={`${basePath}/menu`}
+          <Link
+            href="/menu"
             className="cursor-pointer hover:opacity-70 transition-opacity"
           >
             <svg
@@ -122,9 +123,9 @@ export default function Home() {
                 strokeLinejoin="round"
               />
             </svg>
-          </a>
-          <a
-            href={`${basePath}/notifications`}
+          </Link>
+          <Link
+            href="/notifications"
             className="relative cursor-pointer hover:opacity-70 transition-opacity"
           >
             <svg
@@ -154,7 +155,7 @@ export default function Home() {
                 </span>
               </div>
             )}
-          </a>
+          </Link>
           <button onClick={handleLogout}>
             <svg
               className="w-6 h-6 text-[#24252C]"
@@ -227,8 +228,8 @@ export default function Home() {
 
         {/* Productivity Tools */}
         <div className="grid grid-cols-2 gap-4 mb-6">
-          <a
-            href={`${basePath}/pomodoro`}
+          <Link
+            href="/pomodoro"
             className="bg-gradient-to-br from-[#5F33E1] to-[#8B6FE8] rounded-[15px] p-4 shadow-[0px_4px_32px_rgba(0,0,0,0.04)] text-white"
           >
             <div className="flex items-center gap-2 mb-2">
@@ -248,9 +249,9 @@ export default function Home() {
               <h3 className="text-sm font-semibold">Pomodoro</h3>
             </div>
             <p className="text-xs text-white/80">Focus timer</p>
-          </a>
-          <a
-            href={`${basePath}/time-blocking`}
+          </Link>
+          <Link
+            href="/time-blocking"
             className="bg-gradient-to-br from-[#6E6A7C] to-[#8B8A9C] rounded-[15px] p-4 shadow-[0px_4px_32px_rgba(0,0,0,0.04)] text-white"
           >
             <div className="flex items-center gap-2 mb-2">
@@ -267,7 +268,7 @@ export default function Home() {
               <h3 className="text-sm font-semibold">Time Blocking</h3>
             </div>
             <p className="text-xs text-white/80">Schedule your day</p>
-          </a>
+          </Link>
         </div>
 
         {/* Statistics Title */}
@@ -278,13 +279,13 @@ export default function Home() {
           {tasks.length === 0 ? (
             <div className="bg-white rounded-[15px] p-8 shadow-[0px_4px_32px_rgba(0,0,0,0.04)] text-center">
               <p className="text-sm text-[#6E6A7C]" suppressHydrationWarning>{isClient ? t.tasks.noTasksToday : 'No tasks for today'}</p>
-              <a
-                href={`${basePath}/new-task`}
+              <Link
+                href="/new-task"
                 className="mt-4 inline-block text-sm text-[#5F33E1] font-semibold"
                 suppressHydrationWarning
               >
                 {isClient ? t.tasks.createTask : 'Create Task'}
-              </a>
+              </Link>
             </div>
           ) : (
             tasks.map((task) => {

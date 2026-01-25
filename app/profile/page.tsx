@@ -6,6 +6,7 @@ import { getCurrentUser, logout, updateUser } from '../../lib/auth'
 import { getTaskStats } from '../../lib/tasks'
 import { toast } from '../../lib/toast'
 import { useTranslation } from '../../lib/useTranslation'
+import Link from 'next/link'
 import PageHeader from '../../components/PageHeader'
 import BottomNavigation from '../../components/BottomNavigation'
 
@@ -404,7 +405,7 @@ export default function ProfilePage() {
         <div className="bg-white rounded-[15px] p-6 shadow-[0px_4px_32px_rgba(0,0,0,0.04)]">
           <h3 className="text-lg font-semibold text-[#24252C] mb-4">{t.profile.settings}</h3>
           <div className="space-y-4">
-            <a href={`${basePath}/notifications`} className="w-full flex items-center justify-between py-3">
+            <Link href="/notifications" className="w-full flex items-center justify-between py-3">
               <span className="text-sm text-[#24252C]">{t.profile.notifications}</span>
               <svg
                 className="w-5 h-5 text-[#6E6A7C]"
@@ -419,7 +420,7 @@ export default function ProfilePage() {
                   strokeLinejoin="round"
                 />
               </svg>
-            </a>
+            </Link>
             <button className="w-full flex items-center justify-between py-3">
               <span className="text-sm text-[#24252C]">{t.profile.theme}</span>
               <svg
@@ -436,7 +437,7 @@ export default function ProfilePage() {
                 />
               </svg>
             </button>
-            <a href={`${basePath}/settings`} className="w-full flex items-center justify-between py-3">
+            <Link href="/settings" className="w-full flex items-center justify-between py-3">
               <span className="text-sm text-[#24252C]">{t.profile.language}</span>
               <svg
                 className="w-5 h-5 text-[#6E6A7C]"
@@ -451,7 +452,7 @@ export default function ProfilePage() {
                   strokeLinejoin="round"
                 />
               </svg>
-            </a>
+            </Link>
           </div>
         </div>
 

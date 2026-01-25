@@ -1,6 +1,6 @@
 'use client'
 
-import { useBasePath } from '../lib/useBasePath'
+import Link from 'next/link'
 
 interface PageHeaderProps {
   title: string
@@ -10,14 +10,11 @@ interface PageHeaderProps {
 }
 
 export default function PageHeader({ title, showBack = true, backUrl, rightAction }: PageHeaderProps) {
-  const basePath = useBasePath()
-  const defaultBackUrl = `${basePath}/home`
-
   return (
     <div className="flex items-center justify-between px-6 pt-7 pb-4 border-b border-gray-100 bg-white sticky top-0 z-40">
       {showBack ? (
-        <a
-          href={backUrl || defaultBackUrl}
+        <Link
+          href={backUrl || '/home'}
           className="w-6 h-6 flex items-center justify-center hover:opacity-70 transition-opacity"
         >
           <svg
@@ -33,7 +30,7 @@ export default function PageHeader({ title, showBack = true, backUrl, rightActio
               strokeLinejoin="round"
             />
           </svg>
-        </a>
+        </Link>
       ) : (
         <div className="w-6 h-6" />
       )}

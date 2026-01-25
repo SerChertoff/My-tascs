@@ -1,12 +1,11 @@
 'use client'
 
-import { useBasePath } from '../lib/useBasePath'
+import Link from 'next/link'
 import { useTranslation } from '../lib/useTranslation'
 
 export default function LandingClient() {
   const { t, isClient } = useTranslation()
-  const basePath = useBasePath()
-  const staticBase = process.env.NEXT_PUBLIC_BASE_PATH || basePath
+  const staticBase = process.env.NEXT_PUBLIC_BASE_PATH || ''
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-white">
@@ -42,6 +41,7 @@ export default function LandingClient() {
           alt=""
           width={36}
           height={52}
+          loading="lazy"
           className="object-contain drop-shadow-md"
         />
       </div>
@@ -51,6 +51,7 @@ export default function LandingClient() {
           alt=""
           width={40}
           height={50}
+          loading="lazy"
           className="object-contain drop-shadow-md"
         />
       </div>
@@ -60,6 +61,7 @@ export default function LandingClient() {
           alt=""
           width={62}
           height={42}
+          loading="lazy"
           className="object-contain drop-shadow-md"
         />
       </div>
@@ -69,6 +71,7 @@ export default function LandingClient() {
           alt=""
           width={26}
           height={26}
+          loading="lazy"
           className="object-contain drop-shadow-md"
         />
       </div>
@@ -78,6 +81,7 @@ export default function LandingClient() {
           alt=""
           width={18}
           height={22}
+          loading="lazy"
           className="object-contain drop-shadow-md"
         />
       </div>
@@ -87,6 +91,7 @@ export default function LandingClient() {
           alt=""
           width={36}
           height={33}
+          loading="lazy"
           className="object-contain drop-shadow-md"
         />
       </div>
@@ -99,8 +104,8 @@ export default function LandingClient() {
         <p className="text-sm text-[#6E6A7C] text-center mb-8 max-w-[266px] leading-relaxed" suppressHydrationWarning>
           {isClient ? t.start.description : "This productive tool is designed to help you better manage your task project-wise conveniently!"}
         </p>
-        <a
-          href={`${basePath}/login`}
+        <Link
+          href="/login"
           className="w-full max-w-[331px] h-[52px] bg-[#5F33E1] rounded-[15px] text-white font-semibold text-lg flex items-center justify-center relative"
           suppressHydrationWarning
         >
@@ -118,7 +123,7 @@ export default function LandingClient() {
               strokeLinejoin="round"
             />
           </svg>
-        </a>
+        </Link>
       </div>
     </div>
   )
