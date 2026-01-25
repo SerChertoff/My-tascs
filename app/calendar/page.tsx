@@ -119,7 +119,7 @@ export default function CalendarPage() {
                 strokeLinejoin="round"
               />
             </svg>
-          </a>
+          </Link>
         }
       />
 
