@@ -11,6 +11,11 @@
 - TypeScript
 - Tailwind CSS
 
+### SEO и деплой
+
+- **NEXT_PUBLIC_SITE_URL** — для production задайте в `.env.production` полный URL сайта (например `https://username.github.io`). Нужен для `metadataBase`, `robots.txt`, `sitemap.xml` и Open Graph. Если не задан, используется `https://example.com`.
+- Фавикон: `app/icon.svg`. Лендинг `/` индексируется; страницы приложения (login, home, tasks и др.) закрыты от индекса (noindex + Disallow в robots).
+
 
 
 
