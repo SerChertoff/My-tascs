@@ -108,16 +108,7 @@ export default function SettingsPage() {
 
   const handleLanguageChange = (newLanguage: Language) => {
     setLanguage(newLanguage)
-    // Сообщение показываем на текущем языке перед перезагрузкой
-    if (language === 'ru') {
-      toast.success('Язык изменен')
-    } else {
-      toast.success('Language changed')
-    }
-    // Перезагружаем страницу для применения языка
-    setTimeout(() => {
-      window.location.reload()
-    }, 500)
+    // setLanguage сохраняет в localStorage и вызывает window.location.reload()
   }
 
   return (
@@ -158,7 +149,7 @@ export default function SettingsPage() {
                     type={showPassword ? 'text' : 'password'}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Новый пароль"
+                    placeholder={t.settings.newPassword}
                     className="w-full h-[40px] px-4 pr-12 border border-[#5F33E1] rounded-[15px] text-sm focus:outline-none focus:ring-2 focus:ring-[#5F33E1]"
                   />
                   <button

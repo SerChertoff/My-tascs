@@ -19,7 +19,7 @@ import PageHeader from '../../components/PageHeader'
 import BottomNavigation from '../../components/BottomNavigation'
 
 export default function TasksPage() {
-  const { t } = useTranslation()
+  const { t, language } = useTranslation()
   const [user, setUser] = useState<{ email: string; name?: string } | null>(null)
   const [allTasks, setAllTasks] = useState<Task[]>([])
   const [filteredTasks, setFilteredTasks] = useState<Task[]>([])
@@ -140,7 +140,7 @@ export default function TasksPage() {
         <div className="relative">
           <input
             type="text"
-            placeholder={t.tasks.tasks === 'Tasks' ? 'Search tasks...' : 'Поиск задач...'}
+            placeholder={t.tasks.searchPlaceholder}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full h-[44px] pl-10 pr-4 border border-[#5F33E1] rounded-[15px] text-sm placeholder:text-[#24252C] placeholder:opacity-60 focus:outline-none focus:ring-2 focus:ring-[#5F33E1]"
@@ -165,7 +165,7 @@ export default function TasksPage() {
                 : 'bg-gray-100 text-[#6E6A7C]'
             }`}
           >
-            All
+            {t.common.all}
           </button>
           <button
             onClick={() => setFilterStatus('pending')}
@@ -175,7 +175,7 @@ export default function TasksPage() {
                 : 'bg-gray-100 text-[#6E6A7C]'
             }`}
           >
-            Pending
+            {t.tasks.pending}
           </button>
           <button
             onClick={() => setFilterStatus('completed')}
@@ -185,10 +185,11 @@ export default function TasksPage() {
                 : 'bg-gray-100 text-[#6E6A7C]'
             }`}
           >
-            Completed
+            {t.tasks.completed}
           </button>
           {priorityOptions.map((priority) => {
             const colors = getPriorityColors(priority)
+            const label = priority === 'High' ? t.tasks.high : priority === 'Medium' ? t.tasks.medium : t.tasks.low
             return (
               <button
                 key={priority}
@@ -199,7 +200,7 @@ export default function TasksPage() {
                     : 'bg-gray-100 text-[#6E6A7C]'
                 }`}
               >
-                {priority}
+                {label}
               </button>
             )
           })}
@@ -213,9 +214,9 @@ export default function TasksPage() {
             onChange={(e) => setSortBy(e.target.value as 'date' | 'priority' | 'title')}
             className="flex-1 h-[36px] px-3 border border-[#5F33E1] rounded-[15px] text-sm focus:outline-none focus:ring-2 focus:ring-[#5F33E1]"
           >
-            <option value="date">Date</option>
-            <option value="priority">Priority</option>
-            <option value="title">Title</option>
+            <option value="date">{t.tasks.date}</option>
+            <option value="priority">{t.tasks.priority}</option>
+            <option value="title">{t.tasks.title}</option>
           </select>
         </div>
       </div>
@@ -225,7 +226,7 @@ export default function TasksPage() {
         {filteredTasks.length === 0 ? (
           <div className="bg-white rounded-[15px] p-8 shadow-[0px_4px_32px_rgba(0,0,0,0.04)] text-center">
             <p className="text-sm text-[#6E6A7C] mb-2">
-              {searchQuery ? (t.tasks.tasks === 'Tasks' ? 'No tasks found' : 'Задачи не найдены') : t.tasks.noTasks}
+              {searchQuery ? t.tasks.noTasksFound : t.tasks.noTasks}
             </p>
             <a
               href={`${basePath}/new-task`}
@@ -347,8 +348,8 @@ export default function TasksPage() {
                               : 'text-[#AB94FF]'
                           }`}>
                             {isToday
-                              ? 'Сегодня'
-                              : taskDate.toLocaleDateString('ru-RU', {
+                              ? t.common.today
+                              : taskDate.toLocaleDateString(language === 'ru' ? 'ru-RU' : 'en-US', {
                                   day: 'numeric',
                                   month: 'short',
                                 })}
@@ -356,7 +357,7 @@ export default function TasksPage() {
                         </div>
                         <div className={`${priorityColors.bg} px-2 py-0.5 rounded-[7px]`}>
                           <span className={`text-[9px] ${priorityColors.text} font-semibold`}>
-                            {task.priority}
+                            {task.priority === 'High' ? t.tasks.high : task.priority === 'Medium' ? t.tasks.medium : t.tasks.low}
                           </span>
                         </div>
                       </div>
@@ -386,110 +387,7 @@ export default function TasksPage() {
         )}
       </div>
 
-      {/* Bottom Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 shadow-[0px_-4px_32px_rgba(0,0,0,0.04)]">
-        <div className="flex items-center justify-around px-4 py-3">
-          <a href={`${basePath}/home`} className="flex flex-col items-center">
-            <div className="w-6 h-6 mb-1">
-              <svg viewBox="0 0 24 24" fill="none" className="w-full h-full">
-                <path
-                  d="M9.02 2.84L3.63 7.04C2.73 7.74 2 9.23 2 10.36V17.77C2 20.09 3.89 21.99 6.21 21.99H17.79C20.11 21.99 22 20.09 22 17.77V10.36C22 9.23 21.27 7.74 20.37 7.05L14.98 2.84C13.54 1.74 11.46 1.74 10.02 2.84Z"
-                  stroke="#6E6A7C"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-          </a>
-          <a href={`${basePath}/calendar`} className="flex flex-col items-center">
-            <div className="w-6 h-6 mb-1">
-              <svg viewBox="0 0 24 24" fill="none" className="w-full h-full">
-                <path
-                  d="M8 2V6"
-                  stroke="#6E6A7C"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M16 2V6"
-                  stroke="#6E6A7C"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M3 10H21"
-                  stroke="#6E6A7C"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <rect
-                  x="3"
-                  y="4"
-                  width="18"
-                  height="18"
-                  rx="2"
-                  stroke="#6E6A7C"
-                  strokeWidth="2"
-                />
-              </svg>
-            </div>
-          </a>
-          <a href={`${basePath}/new-task`} className="flex flex-col items-center">
-            <div className="w-11 h-11 bg-[#5F33E1] rounded-full flex items-center justify-center shadow-[2px_10px_18px_rgba(95,51,225,0.49)]">
-              <svg
-                className="w-6 h-6 text-white"
-                viewBox="0 0 24 24"
-                fill="none"
-              >
-                <path
-                  d="M12 5V19M5 12H19"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-          </a>
-          <a href={`${basePath}/tasks`} className="flex flex-col items-center">
-            <div className="w-6 h-6 mb-1">
-              <svg viewBox="0 0 24 24" fill="none" className="w-full h-full">
-                <path
-                  d="M14.68 2.02L14.68 2.02C14.68 2.02 6.75 12.25 6.75 12.25L14.68 16.25L14.68 16.25"
-                  stroke="#5F33E1"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-          </a>
-          <a href={`${basePath}/profile`} className="flex flex-col items-center">
-            <div className="w-6 h-6 mb-1">
-              <svg viewBox="0 0 24 24" fill="none" className="w-full h-full">
-                <path
-                  d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z"
-                  stroke="#6E6A7C"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M20.59 22C20.59 18.13 16.74 15 12 15C7.26 15 3.41 18.13 3.41 22"
-                  stroke="#6E6A7C"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-          </a>
-        </div>
-      </div>
+      <BottomNavigation />
     </div>
   )
 }

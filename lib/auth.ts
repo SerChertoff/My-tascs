@@ -13,8 +13,12 @@ const CURRENT_USER_KEY = 'task-sync-current-user'
 // Получить всех зарегистрированных пользователей
 export function getUsers(): User[] {
   if (typeof window === 'undefined') return []
-  const usersJson = localStorage.getItem(STORAGE_KEY)
-  return usersJson ? JSON.parse(usersJson) : []
+  try {
+    const usersJson = localStorage.getItem(STORAGE_KEY)
+    return usersJson ? JSON.parse(usersJson) : []
+  } catch {
+    return []
+  }
 }
 
 // Сохранить пользователя
@@ -74,8 +78,12 @@ export function logout(): void {
 // Получить текущего пользователя
 export function getCurrentUser(): { email: string; name?: string; avatarUrl?: string } | null {
   if (typeof window === 'undefined') return null
-  const userJson = localStorage.getItem(CURRENT_USER_KEY)
-  return userJson ? JSON.parse(userJson) : null
+  try {
+    const userJson = localStorage.getItem(CURRENT_USER_KEY)
+    return userJson ? JSON.parse(userJson) : null
+  } catch {
+    return null
+  }
 }
 
 // Проверить, авторизован ли пользователь

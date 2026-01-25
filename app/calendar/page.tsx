@@ -66,7 +66,7 @@ export default function CalendarPage() {
   const getTasksForDate = (date: Date | null): number => {
     if (!date) return 0
     const dateStr = date.toISOString().split('T')[0]
-    return tasks.filter(t => t.date === dateStr && t.status === 'pending').length
+    return tasks.filter(task => task.date === dateStr && task.status === 'pending').length
   }
 
   const isSelectedDate = (date: Date | null): boolean => {

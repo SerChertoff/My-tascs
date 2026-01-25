@@ -20,8 +20,12 @@ const STORAGE_KEY = 'task-sync-tasks'
 // Получить все задачи
 export function getTasks(): Task[] {
   if (typeof window === 'undefined') return []
-  const tasksJson = localStorage.getItem(STORAGE_KEY)
-  return tasksJson ? JSON.parse(tasksJson) : []
+  try {
+    const tasksJson = localStorage.getItem(STORAGE_KEY)
+    return tasksJson ? JSON.parse(tasksJson) : []
+  } catch {
+    return []
+  }
 }
 
 // Сохранить задачи
@@ -39,14 +43,9 @@ function saveTasks(tasks: Task[]): void {
 // Добавить задачу
 export function addTask(task: Omit<Task, 'id' | 'createdAt' | 'updatedAt' | 'status'>): Task {
   if (typeof window === 'undefined') {
-    console.error('addTask called on server side')
     throw new Error('Cannot add task on server side')
   }
-  
-  console.log('Adding task:', task)
   const tasks = getTasks()
-  console.log('Current tasks:', tasks.length)
-  
   const newTask: Task = {
     ...task,
     id: Date.now().toString(),
@@ -54,15 +53,8 @@ export function addTask(task: Omit<Task, 'id' | 'createdAt' | 'updatedAt' | 'sta
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   }
-  
-  console.log('New task created:', newTask)
   tasks.push(newTask)
   saveTasks(tasks)
-  
-  // Проверяем, что задача действительно сохранилась
-  const savedTasks = getTasks()
-  console.log('Tasks after save:', savedTasks.length)
-  
   return newTask
 }
 
@@ -138,14 +130,15 @@ export function getTaskStats() {
 
 // Форматировать время для отображения
 export function formatTime(time: string): string {
+  if (!time || typeof time !== 'string') return time
   // Если время уже в формате "HH:MM AM/PM", возвращаем как есть
   if (time.includes('AM') || time.includes('PM')) {
     return time
   }
-  
-  // Если время в формате "HH:MM", конвертируем
-  const [hours, minutes] = time.split(':')
-  const hour = parseInt(hours, 10)
+  const [h, m] = time.split(':')
+  const minutes = m != null && m !== '' ? m : '00'
+  const hour = parseInt(h, 10)
+  if (isNaN(hour)) return time
   const ampm = hour >= 12 ? 'PM' : 'AM'
   const displayHour = hour % 12 || 12
   return `${displayHour}:${minutes} ${ampm}`

@@ -42,7 +42,7 @@ export default function NewTaskPage() {
     if (id) {
       try {
         const tasks = getTasks()
-        const task = tasks.find(t => t.id === id)
+        const task = tasks.find((item) => item.id === id)
         if (task) {
           setIsEdit(true)
           setTaskId(id)
@@ -97,8 +97,6 @@ export default function NewTaskPage() {
     }
 
     try {
-      console.log('Submitting task form:', { title, time, date, priority, isEdit, taskId })
-      
       if (isEdit && taskId) {
         const updated = updateTask(taskId, {
           title: title.trim(),
@@ -110,24 +108,17 @@ export default function NewTaskPage() {
         if (!updated) {
           throw new Error('Task not found')
         }
-        console.log('Task updated:', updated)
         toast.success(t.tasks.taskUpdated)
       } else {
-        const newTask = addTask({
+        addTask({
           title: title.trim(),
           description: description.trim() || undefined,
           time: time.trim(),
           date: date.trim(),
           priority,
         })
-        console.log('Task created:', newTask)
         toast.success(t.tasks.taskCreated)
       }
-      
-      // Проверяем, что задача сохранилась перед редиректом
-      const allTasks = getTasks()
-      console.log('All tasks after save:', allTasks)
-      
       setTimeout(() => {
         window.location.href = `${basePath}/home`
       }, 500)
@@ -193,7 +184,7 @@ export default function NewTaskPage() {
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-semibold text-[#24252C] mb-2">
-              Date
+              {t.tasks.date}
             </label>
             <input
               type="date"
@@ -222,7 +213,7 @@ export default function NewTaskPage() {
         {/* Priority */}
         <div>
           <label className="block text-sm font-semibold text-[#24252C] mb-3">
-            Priority
+            {t.tasks.priority}
           </label>
           <div className="flex gap-3">
             {priorityOptions.map((option) => (
@@ -255,7 +246,7 @@ export default function NewTaskPage() {
           type="submit"
           className="w-full h-[52px] bg-[#5F33E1] rounded-[14px] text-white font-semibold text-lg flex items-center justify-center relative mt-8"
         >
-          {isEdit ? 'Update Task' : 'Create Task'}
+          {isEdit ? t.tasks.updateTask : t.tasks.createTask}
           <svg
             className="absolute right-6 w-6 h-6"
             viewBox="0 0 24 24"

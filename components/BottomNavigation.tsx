@@ -38,7 +38,7 @@ export default function BottomNavigation() {
             </svg>
           </div>
           <span className={`text-[10px] ${isActive('/home') ? 'text-[#5F33E1]' : 'text-[#6E6A7C]'}`}>
-            {t.common.save === 'Save' ? 'Home' : 'Главная'}
+            {t.common.home}
           </span>
         </a>
         <a
