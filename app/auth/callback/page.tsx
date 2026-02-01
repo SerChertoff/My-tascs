@@ -1,13 +1,13 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { useBasePath } from '../../lib/useBasePath'
-import { setSessionFromOAuth, apiGetMe, isApiAuthEnabled } from '../../lib/authApi'
-import type { ApiUser } from '../../lib/authApi'
+import { useBasePath } from '../../../lib/useBasePath'
+import { setSessionFromOAuth, apiGetMe, isApiAuthEnabled } from '../../../lib/authApi'
+import type { ApiUser } from '../../../lib/authApi'
 
-export default function AuthCallbackPage() {
+function AuthCallbackContent() {
   const searchParams = useSearchParams()
   const basePath = useBasePath()
   const [status, setStatus] = useState<'loading' | 'ok' | 'error'>('loading')
@@ -86,4 +86,18 @@ export default function AuthCallbackPage() {
   }
 
   return null
+}
+
+export default function AuthCallbackPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex flex-col items-center justify-center px-6 bg-white">
+          <p className="text-[#24252C]">Вход через Google…</p>
+        </div>
+      }
+    >
+      <AuthCallbackContent />
+    </Suspense>
+  )
 }

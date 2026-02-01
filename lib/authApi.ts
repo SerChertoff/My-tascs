@@ -35,7 +35,7 @@ export type RegisterBody = {
 
 async function request<T>(
   path: string,
-  options: RequestInit & { body?: unknown } = {}
+  options: Omit<RequestInit, 'body'> & { body?: unknown } = {}
 ): Promise<T> {
   const base = getApiUrl()
   if (!base) throw new Error('NEXT_PUBLIC_API_URL is not set')

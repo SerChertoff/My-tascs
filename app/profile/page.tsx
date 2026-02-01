@@ -12,7 +12,7 @@ import BottomNavigation from '../../components/BottomNavigation'
 
 export default function ProfilePage() {
   const { t } = useTranslation()
-  const [user, setUser] = useState<{ email: string; name?: string; avatarUrl?: string } | null>(null)
+  const [user, setUser] = useState<{ email: string; name?: string; firstName?: string; lastName?: string; avatarUrl?: string } | null>(null)
   const [stats, setStats] = useState(getTaskStats())
   const [name, setName] = useState('')
   const [isEditing, setIsEditing] = useState(false)
