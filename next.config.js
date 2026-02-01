@@ -7,8 +7,9 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  output: 'export',
-  trailingSlash: true,
+  // Static export only in production — dev server needs normal mode
+  ...(isProd && { output: 'export' }),
+  ...(isProd && { trailingSlash: true }),
   basePath: isProd ? `/${repoName}` : '',
   assetPrefix: isProd ? `/${repoName}` : '',
   env: {

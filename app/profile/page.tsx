@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useBasePath } from '../../lib/useBasePath'
-import { getCurrentUser, logout, updateUser } from '../../lib/auth'
+import { getCurrentUser, getDisplayName, logout, updateUser } from '../../lib/auth'
 import { getTaskStats } from '../../lib/tasks'
 import { toast } from '../../lib/toast'
 import { useTranslation } from '../../lib/useTranslation'
@@ -25,7 +25,7 @@ export default function ProfilePage() {
       window.location.href = `${basePath}/login`
     } else {
       setUser(currentUser)
-      setName(currentUser.name || '')
+      setName(getDisplayName(currentUser) || currentUser.name || '')
       setStats(getTaskStats())
     }
   }, [basePath])
@@ -168,7 +168,7 @@ export default function ProfilePage() {
               ) : (
                 <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#5F33E1] to-[#8B6FE8]">
                   <span className="text-3xl font-semibold text-white">
-                    {user?.name?.[0]?.toUpperCase() || user?.email?.[0]?.toUpperCase() || 'U'}
+                    {getDisplayName(user)?.[0]?.toUpperCase() || user?.email?.[0]?.toUpperCase() || 'U'}
                   </span>
                 </div>
               )}
@@ -320,7 +320,7 @@ export default function ProfilePage() {
               </button>
               <button
                 onClick={() => {
-                  setName(user.name || '')
+                  setName(user.name || [user.firstName, user.lastName].filter(Boolean).join(' ').trim() || '')
                   setIsEditing(false)
                 }}
                 className="w-10 h-10 bg-gray-100 rounded-[15px] flex items-center justify-center"
@@ -343,7 +343,7 @@ export default function ProfilePage() {
           ) : (
             <div className="flex flex-col items-center gap-2">
               <h2 className="text-xl font-semibold text-[#24252C]">
-                {user.name || user.email}
+                {getDisplayName(user) || user.email}
               </h2>
               <button
                 onClick={() => setIsEditing(true)}

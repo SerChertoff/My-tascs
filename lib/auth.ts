@@ -1,9 +1,11 @@
-// Простая система аутентификации с использованием localStorage
+// Система аутентификации: localStorage или бэкенд (см. authApi.ts)
 
 export interface User {
   email: string
-  password: string
+  password?: string
   name?: string
+  firstName?: string
+  lastName?: string
   avatarUrl?: string
 }
 
@@ -36,18 +38,23 @@ export function saveUser(user: User): void {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(users))
 }
 
-// Регистрация нового пользователя
-export function register(email: string, password: string, name?: string): boolean {
+// Регистрация нового пользователя (локально)
+export function register(
+  email: string,
+  password: string,
+  options?: { name?: string; firstName?: string; lastName?: string; avatarUrl?: string }
+): boolean {
   if (!email || !password) return false
   
   const users = getUsers()
   const existingUser = users.find(u => u.email === email)
   
   if (existingUser) {
-    return false // Пользователь уже существует
+    return false
   }
   
-  saveUser({ email, password, name })
+  const name = options?.name ?? ([options?.firstName, options?.lastName].filter(Boolean).join(' ').trim() || undefined)
+  saveUser({ email, password, name, firstName: options?.firstName, lastName: options?.lastName, avatarUrl: options?.avatarUrl })
   return true
 }
 
@@ -60,7 +67,8 @@ export function login(email: string, password: string): boolean {
   
   if (user) {
     if (typeof window !== 'undefined') {
-      localStorage.setItem(CURRENT_USER_KEY, JSON.stringify({ email: user.email, name: user.name, avatarUrl: user.avatarUrl }))
+      const session = { email: user.email, name: user.name, firstName: user.firstName, lastName: user.lastName, avatarUrl: user.avatarUrl }
+      localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(session))
     }
     return true
   }
@@ -75,8 +83,8 @@ export function logout(): void {
   }
 }
 
-// Получить текущего пользователя
-export function getCurrentUser(): { email: string; name?: string; avatarUrl?: string } | null {
+// Получить текущего пользователя (для отображения в приложении)
+export function getCurrentUser(): { email: string; name?: string; firstName?: string; lastName?: string; avatarUrl?: string } | null {
   if (typeof window === 'undefined') return null
   try {
     const userJson = localStorage.getItem(CURRENT_USER_KEY)
@@ -86,45 +94,43 @@ export function getCurrentUser(): { email: string; name?: string; avatarUrl?: st
   }
 }
 
+// Отображаемое имя: name или "firstName lastName"
+export function getDisplayName(user: { name?: string; firstName?: string; lastName?: string; email?: string } | null): string {
+  if (!user) return ''
+  if (user.name) return user.name
+  const full = [user.firstName, user.lastName].filter(Boolean).join(' ').trim()
+  if (full) return full
+  return user.email || ''
+}
+
 // Проверить, авторизован ли пользователь
 export function isAuthenticated(): boolean {
   return getCurrentUser() !== null
 }
 
-// Обновить данные пользователя
-export function updateUser(updates: { name?: string; avatarUrl?: string }): void {
+// Обновить данные пользователя (локально)
+export function updateUser(updates: { name?: string; firstName?: string; lastName?: string; avatarUrl?: string | null }): void {
   if (typeof window === 'undefined') return
   const currentUser = getCurrentUser()
   if (currentUser) {
-    const updatedUser: { email: string; name?: string; avatarUrl?: string } = { ...currentUser }
-    
-    // Обновляем поля
-    if (updates.name !== undefined) {
-      updatedUser.name = updates.name
-    }
+    const updatedUser = { ...currentUser }
+    if (updates.name !== undefined) updatedUser.name = updates.name
+    if (updates.firstName !== undefined) updatedUser.firstName = updates.firstName
+    if (updates.lastName !== undefined) updatedUser.lastName = updates.lastName
     if (updates.avatarUrl !== undefined) {
-      if (updates.avatarUrl === null || updates.avatarUrl === '') {
-        delete updatedUser.avatarUrl
-      } else {
-        updatedUser.avatarUrl = updates.avatarUrl
-      }
+      if (updates.avatarUrl === null || updates.avatarUrl === '') delete updatedUser.avatarUrl
+      else updatedUser.avatarUrl = updates.avatarUrl
     }
-    
     localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(updatedUser))
-    
-    // Также обновляем в списке пользователей
     const users = getUsers()
-    const userIndex = users.findIndex(u => u.email === currentUser.email)
-    if (userIndex >= 0) {
-      if (updates.name !== undefined) {
-        users[userIndex].name = updates.name
-      }
+    const idx = users.findIndex(u => u.email === currentUser.email)
+    if (idx >= 0) {
+      if (updates.name !== undefined) users[idx].name = updates.name
+      if (updates.firstName !== undefined) users[idx].firstName = updates.firstName
+      if (updates.lastName !== undefined) users[idx].lastName = updates.lastName
       if (updates.avatarUrl !== undefined) {
-        if (updates.avatarUrl === null || updates.avatarUrl === '') {
-          delete users[userIndex].avatarUrl
-        } else {
-          users[userIndex].avatarUrl = updates.avatarUrl
-        }
+        if (updates.avatarUrl === null || updates.avatarUrl === '') delete users[idx].avatarUrl
+        else users[idx].avatarUrl = updates.avatarUrl
       }
       localStorage.setItem(STORAGE_KEY, JSON.stringify(users))
     }

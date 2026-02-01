@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { useBasePath } from '../lib/useBasePath'
-import { getCurrentUser, logout } from '../lib/auth'
+import { getCurrentUser, getDisplayName, logout } from '../lib/auth'
 import {
   Task,
   getTodayTasks,
@@ -20,7 +20,7 @@ import BottomNavigation from './BottomNavigation'
 
 export default function Home() {
   const { t, isClient } = useTranslation()
-  const [user, setUser] = useState<{ email: string; name?: string; avatarUrl?: string } | null>(null)
+  const [user, setUser] = useState<{ email: string; name?: string; firstName?: string; lastName?: string; avatarUrl?: string } | null>(null)
   const [tasks, setTasks] = useState<Task[]>([])
   const [stats, setStats] = useState(getTaskStats())
   const [pendingTasksCount, setPendingTasksCount] = useState(0)
@@ -91,18 +91,20 @@ export default function Home() {
       {/* Header */}
       <div className="flex items-center justify-between px-6 pt-7 pb-4">
         <div className="flex items-center gap-4">
-          <div className="w-[46px] h-[46px] rounded-full bg-gray-200 overflow-hidden">
-            <img
-              src={`${basePath}/images/avatar.png`}
-              alt="Avatar"
-              width={46}
-              height={46}
-              className="object-cover"
-            />
+          <div className="w-[46px] h-[46px] rounded-full bg-gray-200 overflow-hidden flex-shrink-0">
+            {user.avatarUrl ? (
+              <img src={user.avatarUrl} alt="" width={46} height={46} className="object-cover w-full h-full" />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#5F33E1] to-[#8B6FE8]">
+                <span className="text-lg font-semibold text-white">
+                  {getDisplayName(user)[0]?.toUpperCase() || user.email?.[0]?.toUpperCase() || 'U'}
+                </span>
+              </div>
+            )}
           </div>
           <div>
             <p className="text-sm text-[#24252C]" suppressHydrationWarning>{isClient ? t.home.hello : 'Hello!'}</p>
-            <p className="text-lg font-semibold text-[#24252C]">{user.name || user.email}</p>
+            <p className="text-lg font-semibold text-[#24252C]">{getDisplayName(user) || user.email}</p>
           </div>
         </div>
         <div className="flex items-center gap-4">
@@ -246,9 +248,9 @@ export default function Home() {
                   strokeLinecap="round"
                 />
               </svg>
-              <h3 className="text-sm font-semibold">Pomodoro</h3>
+              <h3 className="text-sm font-semibold">{t.pomodoro.pomodoro}</h3>
             </div>
-            <p className="text-xs text-white/80">Focus timer</p>
+            <p className="text-xs text-white/80">{t.pomodoro.focusTimer}</p>
           </Link>
           <Link
             href="/time-blocking"
@@ -265,9 +267,9 @@ export default function Home() {
                 <path d="M8 2V6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                 <path d="M16 2V6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
               </svg>
-              <h3 className="text-sm font-semibold">Time Blocking</h3>
+              <h3 className="text-sm font-semibold">{t.timeBlocking.timeBlocking}</h3>
             </div>
-            <p className="text-xs text-white/80">Schedule your day</p>
+            <p className="text-xs text-white/80">{t.timeBlocking.scheduleYourDay}</p>
           </Link>
         </div>
 

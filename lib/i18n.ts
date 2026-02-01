@@ -28,9 +28,13 @@ const TRANSLATIONS = {
       email: 'Email',
       password: 'Password',
       name: 'Name',
+      firstName: 'First name',
+      lastName: 'Last name',
       enter: 'Enter',
       loginButton: 'Login',
       registerButton: 'Register',
+      loginWithGoogle: 'Continue with Google',
+      signUpWithGoogle: 'Sign up with Google',
       alreadyExists: 'User with this email already exists',
       invalidCredentials: 'Invalid email or password',
       fillAllFields: 'Please fill in all fields',
@@ -126,6 +130,7 @@ const TRANSLATIONS = {
     // Pomodoro
     pomodoro: {
       pomodoro: 'Pomodoro',
+      focusTimer: 'Focus timer',
       focusTime: 'Focus Time',
       shortBreak: 'Short Break',
       longBreak: 'Long Break',
@@ -136,6 +141,7 @@ const TRANSLATIONS = {
     // Time Blocking
     timeBlocking: {
       timeBlocking: 'Time Blocking',
+      scheduleYourDay: 'Schedule your day',
       addTimeBlock: 'Add Time Block',
       daySummary: 'Day Summary',
       scheduledTasks: 'Scheduled Tasks',
@@ -206,9 +212,13 @@ const TRANSLATIONS = {
       email: 'Email',
       password: 'Пароль',
       name: 'Имя',
+      firstName: 'Имя',
+      lastName: 'Фамилия',
       enter: 'Войти',
       loginButton: 'Войти',
       registerButton: 'Зарегистрироваться',
+      loginWithGoogle: 'Войти через Google',
+      signUpWithGoogle: 'Зарегистрироваться через Google',
       alreadyExists: 'Пользователь с таким email уже существует',
       invalidCredentials: 'Неверный email или пароль',
       fillAllFields: 'Пожалуйста, заполните все поля',
@@ -303,7 +313,8 @@ const TRANSLATIONS = {
     },
     // Pomodoro
     pomodoro: {
-      pomodoro: 'Pomodoro',
+      pomodoro: 'Помодоро',
+      focusTimer: 'Таймер фокуса',
       focusTime: 'Время работы',
       shortBreak: 'Короткий перерыв',
       longBreak: 'Длинный перерыв',
@@ -313,7 +324,8 @@ const TRANSLATIONS = {
     },
     // Time Blocking
     timeBlocking: {
-      timeBlocking: 'Time Blocking',
+      timeBlocking: 'Тайм-блоки',
+      scheduleYourDay: 'Распланируйте день',
       addTimeBlock: 'Добавить блок времени',
       daySummary: 'Итоги дня',
       scheduledTasks: 'Запланированные задачи',

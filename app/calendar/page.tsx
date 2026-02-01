@@ -9,13 +9,30 @@ import Link from 'next/link'
 import PageHeader from '../../components/PageHeader'
 import BottomNavigation from '../../components/BottomNavigation'
 
+const getLocale = (lang: string) => (lang === 'ru' ? 'ru-RU' : 'en-US')
+
+const getMonthYearLabel = (date: Date, locale: string) => {
+  const str = new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric' }).format(date)
+  return locale === 'ru-RU' ? str.charAt(0).toUpperCase() + str.slice(1) : str
+}
+
+const getShortWeekdayNames = (locale: string) => {
+  return [0, 1, 2, 3, 4, 5, 6].map((i) => {
+    const d = new Date(2024, 0, 7 + i)
+    const s = d.toLocaleDateString(locale, { weekday: 'short' })
+    return locale === 'ru-RU' ? s.charAt(0).toUpperCase() + s.slice(1) : s
+  })
+}
+
 export default function CalendarPage() {
-  const { t } = useTranslation()
+  const { t, language } = useTranslation()
+  const locale = getLocale(language)
   const [user, setUser] = useState<{ email: string; name?: string } | null>(null)
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0])
   const [tasks, setTasks] = useState<Task[]>([])
   const [selectedDateTasks, setSelectedDateTasks] = useState<Task[]>([])
   const basePath = useBasePath()
+  const dayNames = getShortWeekdayNames(locale)
 
   useEffect(() => {
     const currentUser = getCurrentUser()
@@ -83,8 +100,6 @@ export default function CalendarPage() {
 
   const currentDate = new Date(selectedDate)
   const days = getDaysInMonth(currentDate)
-  const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-  const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
   const changeMonth = (direction: 'prev' | 'next') => {
     const newDate = new Date(currentDate)
@@ -146,7 +161,7 @@ export default function CalendarPage() {
             </svg>
           </button>
           <h2 className="text-lg font-semibold text-[#24252C]">
-            {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
+            {getMonthYearLabel(currentDate, locale)}
           </h2>
           <button
             onClick={() => changeMonth('next')}
@@ -217,11 +232,14 @@ export default function CalendarPage() {
         {/* Selected Date Tasks */}
         <div className="mt-8">
           <h3 className="text-lg font-semibold text-[#24252C] mb-4">
-            {new Date(selectedDate).toLocaleDateString('ru-RU', {
-              weekday: 'long',
-              day: 'numeric',
-              month: 'long',
-            })}
+            {(() => {
+              const s = new Date(selectedDate + 'T12:00:00').toLocaleDateString(locale, {
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long',
+              })
+              return locale === 'ru-RU' ? s.charAt(0).toUpperCase() + s.slice(1) : s
+            })()}
           </h3>
           
           {selectedDateTasks.length === 0 ? (

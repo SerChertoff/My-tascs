@@ -211,7 +211,7 @@ export default function TasksPage() {
 
         {/* Sort */}
         <div className="flex items-center gap-2">
-          <span className="text-xs text-[#6E6A7C]">Sort by:</span>
+          <span className="text-xs text-[#6E6A7C]">{t.common.sortBy}</span>
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as 'date' | 'priority' | 'title')}
