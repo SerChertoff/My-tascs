@@ -12,36 +12,34 @@ export default function LandingClient() {
       {/* Контейнер лендинга: на десктопе фиксированная ширина по центру, чтобы картинки не уезжали */}
       <div className="relative min-h-screen w-full max-w-[420px] min-w-0">
         {/* Декоративные элементы - эллипсы с градиентами */}
-        <div className="absolute top-[165px] left-[333px] w-[60px] h-[60px] bg-gradient-to-b from-[rgba(37,85,255,1)] to-[rgba(37,85,255,0.25)] rounded-full blur-[100px]" />
-        <div className="absolute top-[357px] left-[76px] w-[58px] h-[58px] bg-gradient-to-b from-[rgba(70,189,240,1)] to-[rgba(70,179,240,0.15)] rounded-full blur-[100px]" />
-        <div className="absolute top-[700px] left-[240px] w-[58px] h-[58px] bg-gradient-to-b from-[rgba(240,182,70,1)] to-[rgba(240,203,70,0.15)] rounded-full blur-[100px]" />
-        <div className="absolute top-[59px] -left-[15px] w-[70px] h-[70px] bg-gradient-to-b from-[rgba(70,240,128,1)] to-[rgba(70,240,138,0.15)] rounded-full blur-[100px]" />
-        <div className="absolute top-[-67px] left-[263px] w-[70px] h-[70px] bg-gradient-to-b from-[rgba(237,240,70,1)] to-[rgba(240,233,70,0.15)] rounded-full blur-[100px]" />
-        <div className="absolute top-[667px] left-[34px] w-[310px] h-[7px] bg-[#5F33E1] rounded-full blur-[30px]" />
+        <div className="absolute top-[125px] left-[333px] w-[60px] h-[60px] bg-gradient-to-b from-[rgba(37,85,255,1)] to-[rgba(37,85,255,0.25)] rounded-full blur-[100px]" />
+        <div className="absolute top-[317px] left-[76px] w-[58px] h-[58px] bg-gradient-to-b from-[rgba(70,189,240,1)] to-[rgba(70,179,240,0.15)] rounded-full blur-[100px]" />
+        <div className="absolute top-[660px] left-[240px] w-[58px] h-[58px] bg-gradient-to-b from-[rgba(240,182,70,1)] to-[rgba(240,203,70,0.15)] rounded-full blur-[100px]" />
+        <div className="absolute top-[19px] -left-[15px] w-[70px] h-[70px] bg-gradient-to-b from-[rgba(70,240,128,1)] to-[rgba(70,240,138,0.15)] rounded-full blur-[100px]" />
+        <div className="absolute top-[-107px] left-[263px] w-[70px] h-[70px] bg-gradient-to-b from-[rgba(237,240,70,1)] to-[rgba(240,233,70,0.15)] rounded-full blur-[100px]" />
+        <div className="absolute top-[627px] left-[34px] w-[310px] h-[7px] bg-[#5F33E1] rounded-full blur-[30px]" />
 
         {/* Декоративные точки */}
-        <div className="absolute top-[316px] left-[250px] w-2 h-2 bg-[#EAED2A] rounded-full" />
-        <div className="absolute top-[324px] left-[138px] w-2 h-2 bg-[#FFD7E4] rounded-full" />
-        <div className="absolute top-[6px] left-[252px] w-2 h-2 bg-[#92DEFF] rounded-full" />
-        <div className="absolute top-[25px] left-[202px] w-1 h-1 bg-[#BE9FFF] rounded-full" />
-        <div className="absolute top-[295px] left-[281px] w-1 h-1 bg-[#7FFCAA] rounded-full" />
-        <div className="absolute top-[338px] left-[176px] w-1 h-1 bg-[#A4E7F9] rounded-full" />
+        <div className="absolute top-[276px] left-[250px] w-2 h-2 bg-[#EAED2A] rounded-full" />
+        <div className="absolute top-[284px] left-[138px] w-2 h-2 bg-[#FFD7E4] rounded-full" />
+        <div className="absolute top-[-34px] left-[252px] w-2 h-2 bg-[#92DEFF] rounded-full" />
+        <div className="absolute top-[-15px] left-[202px] w-1 h-1 bg-[#BE9FFF] rounded-full" />
+        <div className="absolute top-[255px] left-[281px] w-1 h-1 bg-[#7FFCAA] rounded-full" />
+        <div className="absolute top-[298px] left-[176px] w-1 h-1 bg-[#A4E7F9] rounded-full" />
 
         {/* Изображения с анимациями */}
-        <div
-          className="absolute top-[80px] left-[131px] w-[159px] h-[184px] animate-fade-in"
-          style={{ animationDelay: "0.1s" }}
-        >
+        <div className="absolute top-[40px] left-[131px] w-[159px] h-[184px] animate-fade-in">
           <img
             src={`${staticBase}/images/woman-laptop.png`}
             alt=""
             width={159}
             height={184}
+            fetchPriority="high"
             className="object-contain drop-shadow-lg"
           />
         </div>
         <div
-          className="absolute top-[212px] left-[79px] w-[36px] h-[52px] animate-fade-in"
+          className="absolute top-[172px] left-[79px] w-[36px] h-[52px] animate-fade-in"
           style={{ animationDelay: "0.2s" }}
         >
           <img
@@ -54,7 +52,7 @@ export default function LandingClient() {
           />
         </div>
         <div
-          className="absolute top-[69px] left-[104px] w-[40px] h-[50px] animate-fade-in"
+          className="absolute top-[29px] left-[104px] w-[40px] h-[50px] animate-fade-in"
           style={{ animationDelay: "0.3s" }}
         >
           <img
@@ -67,7 +65,7 @@ export default function LandingClient() {
           />
         </div>
         <div
-          className="absolute top-[158px] left-[245px] w-[62px] h-[42px] animate-fade-in"
+          className="absolute top-[118px] left-[245px] w-[62px] h-[42px] animate-fade-in"
           style={{ animationDelay: "0.4s" }}
         >
           <img
@@ -80,7 +78,7 @@ export default function LandingClient() {
           />
         </div>
         <div
-          className="absolute top-[113px] left-[84px] w-[26px] h-[26px] animate-fade-in"
+          className="absolute top-[73px] left-[84px] w-[26px] h-[26px] animate-fade-in"
           style={{ animationDelay: "0.5s" }}
         >
           <img
@@ -93,7 +91,7 @@ export default function LandingClient() {
           />
         </div>
         <div
-          className="absolute top-[243px] left-[67px] w-[18px] h-[22px] animate-fade-in"
+          className="absolute top-[203px] left-[67px] w-[18px] h-[22px] animate-fade-in"
           style={{ animationDelay: "0.6s" }}
         >
           <img
@@ -106,7 +104,7 @@ export default function LandingClient() {
           />
         </div>
         <div
-          className="absolute top-[69px] left-[276px] w-[36px] h-[33px] animate-fade-in"
+          className="absolute top-[29px] left-[276px] w-[36px] h-[33px] animate-fade-in"
           style={{ animationDelay: "0.7s" }}
         >
           <img
